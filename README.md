@@ -3,7 +3,7 @@
 ![🦉 Judie Logo](./assets/judie-logo.png)
 
 # 🦉 judie ✨
-_Evaluate your chunks with Judie, the Owl!_
+_Judge and evaluate your chunk quality with Judie, the Owl! Quick, easy, and effective!_
 
 </div>
 
