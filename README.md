@@ -44,6 +44,14 @@ metrics = evaluator.evaluate()
 print(metrics['Recall@10'])
 ```
 
+## Available Benchmarks
+
+| Benchmark | Description | Dataset |
+|-----------|-------------|---------|
+| Gacha | Gacha is a corpus of 100 textbooks from Gutenberg Corpus and associated questions! | [![HF Dataset](https://huggingface.co/datasets/huggingface/badges/resolve/main/dataset-on-hf-sm.svg)](https://huggingface.co/datasets/chonkie-ai/gacha) |
+
+
+
 ## 📚 Citation
 
 If you use Judie in your work, please cite it as follows:
