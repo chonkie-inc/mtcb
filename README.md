@@ -44,7 +44,7 @@ metrics = evaluator.evaluate()
 print(metrics['Recall@10'])
 ```
 
-## Available Benchmarks
+## 🧩 Available Benchmarks
 
 | Benchmark | Description |
 |-----------|-------------|
