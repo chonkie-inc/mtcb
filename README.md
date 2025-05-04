@@ -48,7 +48,7 @@ print(metrics['Recall@10'])
 
 | Benchmark | Description |
 |-----------|-------------|
-| [🧸 Gacha](https://huggingface.co/datasets/chonkie-ai/gacha) | 🧸 Gacha is a corpus of 100 textbooks from Gutenberg Corpus and associated questions for evaluating chunking algorithms! |
+| [🧸 Gacha](https://huggingface.co/datasets/chonkie-ai/gacha) | 🧸 Gacha is a corpus of 100 most popular textbooks from Gutenberg Corpus and numerous NIAH-style questions for evaluating chunking algorithms! |
 
 
 ## 📚 Citation
