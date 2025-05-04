@@ -50,7 +50,7 @@ If you use Judie in your work, please cite it as follows:
 
 ```bibtex
 @software{judie2025,
-  author = {Bhavnick Minhas and Chonkie Inc.},
+  author = {Bhavnick Minhas and Shreyash Nigam},
   title = {🦉 Judie: Evaluating chunk quality with LLM Judges},
   url = {https://github.com/chonkie-inc/judie},
   version = {0.1.0},
