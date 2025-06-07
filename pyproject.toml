@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "judie"
+version = "0.1.0"
+description = "Judge and evaluate your chunk quality with Judie, the Owl! Quick, easy, and effective!"
+readme = "README.md"
+license = "Apache 2.0"
+authors = [
+    { name = "Bhavnick Minhas" },
+    { name = "Shreyash Nigam" },
+]
+maintainers = [
+    { name = "Bhavnick Minhas" },
+    { name = "Shreyash Nigam" },
+]
+keywords = [
+    "chunking",
+    "rag",
+    "llm",
+    "evaluation",
+    "nlp",
+    "information-retrieval",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Linguistic",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "chonkie[all]>=1.0.0, <1.1.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest>=6.0",
+    "pytest-cov",
+    "mypy",
+]
+
+[project.urls]
+Homepage = "https://github.com/chonkie-inc/judie"
+Repository = "https://github.com/chonkie-inc/judie"
+Documentation = "https://github.com/chonkie-inc/judie#readme"
+"Bug Tracker" = "https://github.com/chonkie-inc/judie/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
