@@ -5,3 +5,4 @@
 *.pyd
 notebooks/*
 .temp/*
+results/*

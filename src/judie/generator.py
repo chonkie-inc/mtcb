@@ -4,7 +4,7 @@ import random
 from typing import Dict, List, Optional, Union
 
 from chonkie import BaseChunker, BaseGenie, GeminiGenie, RecursiveChunker
-from datasets import Dataset
+from datasets import Dataset, DatasetDict
 from pydantic import BaseModel
 from tqdm import tqdm
 
@@ -26,7 +26,7 @@ class DatasetGenerator:
     - Intelligent chunk sampling based on questions_per_document
     - Smart question distribution across selected chunks
     - Source text validation with exact matching
-    - HuggingFace datasets output format
+    - HuggingFace DatasetDict output format
     """
     
     QUESTION_GENERATION_PROMPT = """Given the following text chunk, generate a clear, answerable question based on the content.
@@ -68,7 +68,7 @@ Requirements:
         documents: Union[str, List[str]],
         questions_per_document: int = 10,
         max_retries: int = 3,
-    ) -> Dataset:
+    ) -> DatasetDict:
         """
         Generate evaluation dataset from documents.
         
@@ -78,7 +78,9 @@ Requirements:
             max_retries: Maximum retries for validation failures
             
         Returns:
-            HuggingFace Dataset with QA pairs and metadata
+            HuggingFace DatasetDict with two splits:
+            - 'corpus': Dataset containing documents with document_ids
+            - 'qa': Dataset containing questions, answers, and source text
         """
         if isinstance(documents, str):
             documents = [documents]
@@ -105,14 +107,28 @@ Requirements:
             if progress_bar:
                 progress_bar.close()
         
-        return Dataset.from_list(all_examples)
+        # Create corpus dataset with documents and their IDs
+        corpus_data = []
+        for doc_id, document in enumerate(documents):
+            corpus_data.append({
+                "document_id": doc_id,
+                "document": document
+            })
+        
+        corpus_dataset = Dataset.from_list(corpus_data)
+        qa_dataset = Dataset.from_list(all_examples)
+        
+        return DatasetDict({
+            "corpus": corpus_dataset,
+            "qa": qa_dataset
+        })
 
     def __call__(
         self,
         documents: Union[str, List[str]],
         questions_per_document: int = 10,
         max_retries: int = 3,
-    ) -> Dataset:
+    ) -> DatasetDict:
         """Callable interface - delegates to generate()."""
         return self.generate(documents, questions_per_document, max_retries)
 
