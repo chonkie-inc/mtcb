@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "judie"
-version = "0.0.1"
+version = "0.0.2"
 description = "Judge and evaluate your chunk quality with Judie, the Owl! Quick, easy, and effective!"
 readme = "README.md"
 license = "Apache-2.0"
