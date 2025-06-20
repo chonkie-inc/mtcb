@@ -4,3 +4,4 @@
 *.pyo
 *.pyd
 notebooks/*
+.temp/*
