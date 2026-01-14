@@ -34,18 +34,27 @@ class EvalResult:
     
     def __post_init__(self):
         """Validate the EvalResult after initialization."""
-        if "recall" not in self.metrics:
-            raise ValueError("EvalResult must contain 'recall' metrics")
-    
+        if "recall" not in self.metrics and "mrr" not in self.metrics:
+            raise ValueError("EvalResult must contain at least 'recall' or 'mrr' metrics")
+
     @property
     def recall(self) -> Dict[int, float]:
         """Get recall metrics for easy access."""
-        return self.metrics["recall"]
-    
+        return self.metrics.get("recall", {})
+
+    @property
+    def mrr(self) -> Dict[int, float]:
+        """Get MRR metrics for easy access."""
+        return self.metrics.get("mrr", {})
+
     @property
     def k_values(self) -> List[int]:
         """Get all k values that were evaluated."""
-        return sorted(self.metrics["recall"].keys())
+        if "recall" in self.metrics:
+            return sorted(self.metrics["recall"].keys())
+        elif "mrr" in self.metrics:
+            return sorted(self.metrics["mrr"].keys())
+        return []
     
     def get_metric(self, metric_name: str, k: int) -> float:
         """Get a specific metric value for a given k."""
@@ -104,17 +113,31 @@ class EvalResult:
         lines.append("-" * 60)
         
         # Metrics
-        lines.append("Recall@k:")
-        for k in self.k_values:
-            recall = self.metrics["recall"][k]
-            lines.append(f"  k={k:2d}: {recall:.2%}")
-        
+        if "recall" in self.metrics:
+            lines.append("Recall@k:")
+            for k in self.k_values:
+                recall = self.metrics["recall"][k]
+                lines.append(f"  k={k:2d}: {recall:.2%}")
+
+        if "mrr" in self.metrics:
+            lines.append("MRR@k:")
+            for k in sorted(self.metrics["mrr"].keys()):
+                mrr_val = self.metrics["mrr"][k]
+                lines.append(f"  k={k:2d}: {mrr_val:.4f}")
+
         lines.append("="*60)
         return "\n".join(lines)
     
     def __repr__(self) -> str:
         """Concise representation."""
-        recall_summary = ", ".join([f"R@{k}={v:.2%}" for k, v in sorted(self.metrics["recall"].items())])
+        parts = []
+        if "recall" in self.metrics:
+            recall_summary = ", ".join([f"R@{k}={v:.2%}" for k, v in sorted(self.metrics["recall"].items())])
+            parts.append(recall_summary)
+        if "mrr" in self.metrics:
+            # Just show the max k MRR value for brevity
+            max_k = max(self.metrics["mrr"].keys())
+            parts.append(f"MRR@{max_k}={self.metrics['mrr'][max_k]:.4f}")
         chunker_type = self.metadata.get("chunker_type", "Unknown")
-        return f"EvalResult({recall_summary}, {chunker_type})"
+        return f"EvalResult({', '.join(parts)}, {chunker_type})"
 

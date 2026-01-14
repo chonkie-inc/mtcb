@@ -1,8 +1,46 @@
+# Python
 *.egg-info/
 *.egg
 *.pyc
 *.pyo
 *.pyd
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Notebooks
 notebooks/*
+
+# Temporary files
 .temp/*
+
+# Results and outputs
 results/*
+
+# Scripts data (large corpus, embeddings, chunks, results)
+scripts/data/
+
+# Claude settings (local)
+.claude/settings.local.json
