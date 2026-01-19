@@ -1,7 +1,9 @@
 """Dataset generator for RAG evaluation."""
 
+import json
 import random
 import time
+from pathlib import Path
 from typing import TYPE_CHECKING, Union
 
 from datasets import Dataset, DatasetDict
@@ -24,6 +26,7 @@ class DatasetGenerator:
     - Source text validation (chunk_must_contain)
     - LLM-based semantic deduplication
     - Customizable prompt templates
+    - Incremental saving with resume support via output_path
     - Returns both GenerationResult and DatasetDict formats
     """
 
@@ -69,6 +72,7 @@ class DatasetGenerator:
         corpus: Union[str, list[str]],
         samples_per_document: int = 10,
         max_retries: int = 3,
+        output_path: Union[str, Path, None] = None,
     ) -> GenerationResult:
         """Generate QA samples from a corpus of documents.
 
@@ -76,6 +80,8 @@ class DatasetGenerator:
             corpus: Single document or list of documents.
             samples_per_document: Target number of samples per document.
             max_retries: Maximum retries for validation failures.
+            output_path: Path to save intermediate results (JSONL format).
+                If file exists, resumes from previous progress.
 
         Returns:
             GenerationResult with samples and statistics.
@@ -85,20 +91,38 @@ class DatasetGenerator:
         if isinstance(corpus, str):
             corpus = [corpus]
 
+        # Load existing progress if output_path provided and file exists
+        completed_docs: dict[int, list[GeneratedSample]] = {}
+        if output_path:
+            output_path = Path(output_path)
+            completed_docs = self._load_progress(output_path)
+            if completed_docs:
+                print(f"Resuming: found {len(completed_docs)} completed documents")
+
         all_samples: list[GeneratedSample] = []
         total_generated = 0
         failed_validation = 0
 
-        total_target = len(corpus) * samples_per_document
+        # Add samples from previously completed documents
+        for doc_id in sorted(completed_docs.keys()):
+            all_samples.extend(completed_docs[doc_id])
+
+        # Calculate remaining work
+        remaining_docs = [
+            (doc_id, doc)
+            for doc_id, doc in enumerate(corpus)
+            if doc_id not in completed_docs
+        ]
+        total_target = len(remaining_docs) * samples_per_document
 
         progress_bar = None
-        if self.show_progress_bar:
+        if self.show_progress_bar and total_target > 0:
             progress_bar = tqdm(
                 total=total_target, desc="Generating samples", unit="samples"
             )
 
         try:
-            for doc_id, document in enumerate(corpus):
+            for doc_id, document in remaining_docs:
                 doc_samples, doc_generated, doc_failed = self._process_document(
                     document=document,
                     doc_id=doc_id,
@@ -109,6 +133,11 @@ class DatasetGenerator:
                 all_samples.extend(doc_samples)
                 total_generated += doc_generated
                 failed_validation += doc_failed
+
+                # Save progress after each document
+                if output_path:
+                    self._save_document_progress(output_path, doc_id, doc_samples)
+
         finally:
             if progress_bar:
                 progress_bar.close()
@@ -133,6 +162,45 @@ class DatasetGenerator:
             duplicate_count=duplicate_count,
             generation_time_seconds=generation_time,
         )
+
+    def _load_progress(self, output_path: Path) -> dict[int, list[GeneratedSample]]:
+        """Load previously completed documents from output file."""
+        completed: dict[int, list[GeneratedSample]] = {}
+
+        if not output_path.exists():
+            return completed
+
+        try:
+            with open(output_path, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    data = json.loads(line)
+                    doc_id = data["document_id"]
+                    samples = [
+                        GeneratedSample(**sample) for sample in data["samples"]
+                    ]
+                    completed[doc_id] = samples
+        except (json.JSONDecodeError, KeyError):
+            # If file is corrupted, start fresh
+            return {}
+
+        return completed
+
+    def _save_document_progress(
+        self, output_path: Path, doc_id: int, samples: list[GeneratedSample]
+    ) -> None:
+        """Append completed document samples to output file."""
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        data = {
+            "document_id": doc_id,
+            "samples": [sample.model_dump() for sample in samples],
+        }
+
+        with open(output_path, "a") as f:
+            f.write(json.dumps(data) + "\n")
 
     def _process_document(
         self,
@@ -353,9 +421,10 @@ class DatasetGenerator:
         corpus: Union[str, list[str]],
         samples_per_document: int = 10,
         max_retries: int = 3,
+        output_path: Union[str, Path, None] = None,
     ) -> GenerationResult:
         """Callable interface - delegates to generate()."""
-        return self.generate(corpus, samples_per_document, max_retries)
+        return self.generate(corpus, samples_per_document, max_retries, output_path)
 
     def __repr__(self) -> str:
         return (
