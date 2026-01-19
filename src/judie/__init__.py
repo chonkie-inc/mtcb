@@ -1,9 +1,16 @@
 """Main module for Judie - Evaluate chunk quality for RAG systems."""
 
 from .cache import EvalCache
+from .dataset import (
+    DatasetGenerator,
+    DatasetPromptTemplate,
+    ExactMatchValidator,
+    GeneratedSample,
+    GenerationResult,
+    LLMDeduplicator,
+)
 from .embeddings import CatsuEmbeddings, get_embeddings, get_tokenizer_for_model, TOKENIZER_MAP
 from .evaluators import BaseEvaluator, SimpleEvaluator, GachaEvaluator
-from .generator import DatasetGenerator
 from .store import SimpleVectorStore
 from .types import EvalResult
 
@@ -20,8 +27,14 @@ __all__ = [
     "get_embeddings",
     "get_tokenizer_for_model",
     "TOKENIZER_MAP",
-    # Utilities
+    # Dataset generation
     "DatasetGenerator",
+    "DatasetPromptTemplate",
+    "GeneratedSample",
+    "GenerationResult",
+    "ExactMatchValidator",
+    "LLMDeduplicator",
+    # Utilities
     "SimpleVectorStore",
     "EvalCache",
     "EvalResult",
