@@ -1,5 +1,10 @@
 """Main module for MTCB - Make That Chunker Better! Evaluate chunk quality for RAG systems."""
 
+from .benchmark import (
+    Benchmark,
+    BenchmarkResult,
+    get_available_datasets,
+)
 from .cache import EvalCache
 from .dataset import (
     DatasetGenerator,
@@ -10,7 +15,7 @@ from .dataset import (
     LLMDeduplicator,
 )
 from .embeddings import CatsuEmbeddings, get_embeddings, get_tokenizer_for_model, TOKENIZER_MAP
-from .evaluators import BaseEvaluator, SimpleEvaluator, GachaEvaluator
+from .evaluators import BaseEvaluator, SimpleEvaluator, GachaEvaluator, MachaEvaluator, FichaEvaluator
 from .store import SimpleVectorStore
 from .types import EvalResult
 
@@ -18,10 +23,16 @@ __version__ = "0.0.3"
 
 __all__ = [
     "__version__",
+    # Benchmark
+    "Benchmark",
+    "BenchmarkResult",
+    "get_available_datasets",
     # Evaluators
     "BaseEvaluator",
     "SimpleEvaluator",
     "GachaEvaluator",
+    "MachaEvaluator",
+    "FichaEvaluator",
     # Embeddings
     "CatsuEmbeddings",
     "get_embeddings",
