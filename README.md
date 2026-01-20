@@ -85,7 +85,9 @@ for sample in result.samples:
 
 MTCB calculates:
 - **Recall@k**: Percentage of questions where the relevant passage is in the top-k results
+- **Precision@k**: Ratio of relevant chunks in the top-k results
 - **MRR@k**: Mean Reciprocal Rank at k
+- **NDCG@k**: Normalized Discounted Cumulative Gain at k
 
 ## 🧩 Available Benchmarks
 
