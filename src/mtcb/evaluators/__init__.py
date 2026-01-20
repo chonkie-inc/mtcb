@@ -8,6 +8,7 @@ from .ficha import FichaEvaluator
 from .cocha import CochaEvaluator
 from .tacha import TachaEvaluator
 from .sencha import SenchaEvaluator
+from .hojicha import HojichaEvaluator
 
 __all__ = [
     "BaseEvaluator",
@@ -18,4 +19,5 @@ __all__ = [
     "CochaEvaluator",
     "TachaEvaluator",
     "SenchaEvaluator",
+    "HojichaEvaluator",
 ]
