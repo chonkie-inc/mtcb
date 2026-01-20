@@ -276,6 +276,43 @@ class BenchmarkResult:
         return f"BenchmarkResult({self.name}, datasets=[{datasets_str}], mean_R@5={mean_r5:.2%})"
 
 
+# List of nano dataset names
+NANO_DATASETS = [
+    "nano-gacha",
+    "nano-ficha",
+    "nano-macha",
+    "nano-cocha",
+    "nano-tacha",
+    "nano-sencha",
+    "nano-hojicha",
+    "nano-ryokucha",
+    "nano-genmaicha",
+]
+
+# List of full dataset names (non-nano)
+FULL_DATASETS = [
+    "gacha",
+    "ficha",
+    "macha",
+    "cocha",
+    "tacha",
+    "sencha",
+    "hojicha",
+    "ryokucha",
+    "genmaicha",
+]
+
+
+def get_nano_datasets() -> List[str]:
+    """Get list of nano dataset names."""
+    return [d for d in NANO_DATASETS if d in _EVALUATOR_REGISTRY]
+
+
+def get_full_datasets() -> List[str]:
+    """Get list of full (non-nano) dataset names."""
+    return [d for d in FULL_DATASETS if d in _EVALUATOR_REGISTRY]
+
+
 @dataclass
 class Benchmark:
     """A benchmark that runs evaluation across multiple datasets.
@@ -317,9 +354,9 @@ class Benchmark:
 
     def __post_init__(self):
         """Set defaults and validate datasets exist."""
-        # Default to all available datasets
+        # Default to all full (non-nano) datasets
         if self.datasets is None:
-            self.datasets = get_available_datasets()
+            self.datasets = get_full_datasets()
 
         # Validate all datasets exist
         for dataset in self.datasets:
@@ -419,4 +456,56 @@ class Benchmark:
     def __repr__(self) -> str:
         return f"Benchmark({self.name!r}, datasets={self.datasets})"
 
+
+@dataclass
+class NanoBenchmark(Benchmark):
+    """A lightweight benchmark using nano datasets (~100 questions each).
+
+    NanoBenchmark uses the nano versions of each dataset for fast iteration
+    and testing during development. It runs the same evaluation pipeline
+    as the full Benchmark but with much smaller datasets.
+
+    Args:
+        name: Name of the benchmark (default: "MTCB Nano Benchmark")
+        datasets: List of nano dataset names. If None, uses all nano datasets.
+        description: Optional description of the benchmark
+        reference: Optional URL reference
+
+    Example:
+        >>> from mtcb import NanoBenchmark
+        >>> from chonkie import RecursiveChunker
+        >>>
+        >>> # Default: all nano datasets
+        >>> benchmark = NanoBenchmark()
+        >>>
+        >>> # Or specify specific nano datasets
+        >>> benchmark = NanoBenchmark(datasets=["nano-gacha", "nano-ficha"])
+        >>>
+        >>> # Run the benchmark (much faster than full benchmark)
+        >>> result = benchmark.evaluate(
+        ...     chunker=RecursiveChunker(chunk_size=1000),
+        ...     embedding_model="model2vec://minishlab/potion-base-8M",
+        ...     k=[1, 5, 10],
+        ... )
+        >>> print(result)
+    """
+
+    name: str = "MTCB Nano Benchmark"
+
+    def __post_init__(self):
+        """Set defaults and validate datasets exist."""
+        # Default to all nano datasets
+        if self.datasets is None:
+            self.datasets = get_nano_datasets()
+
+        # Validate all datasets exist
+        for dataset in self.datasets:
+            if dataset.lower() not in _EVALUATOR_REGISTRY:
+                available = ", ".join(get_nano_datasets())
+                raise ValueError(
+                    f"Unknown nano dataset: '{dataset}'. Available: {available}"
+                )
+
+    def __repr__(self) -> str:
+        return f"NanoBenchmark({self.name!r}, datasets={self.datasets})"
 

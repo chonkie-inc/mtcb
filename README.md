@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🔬 mtcb ✨
-_Make That Chunker Better! Evaluate your RAG chunking with ease._
+_Massive Text Chunking Benchmark. Evaluate your RAG chunking with ease._
 
 </div>
 
@@ -112,7 +112,7 @@ If you use MTCB in your work, please cite it as follows:
 ```bibtex
 @software{mtcb2025,
   author = {Bhavnick Minhas and Shreyash Nigam},
-  title = {🔬 MTCB: Make That Chunker Better!},
+  title = {MTCB: Massive Text Chunking Benchmark},
   url = {https://github.com/chonkie-inc/mtcb},
   version = {0.1.0},
   year = {2025},
