@@ -112,18 +112,18 @@ The full MTCB benchmark contains 16,974 questions across 3,202 documents spannin
 
 For fast iteration and testing, MTCB provides a lightweight nano benchmark with ~100 questions per dataset:
 
-| Dataset | Documents | Questions |
-|---------|----------:|----------:|
-| [nano-gacha](https://huggingface.co/datasets/chonkie-ai/nano-gacha) | 60 | 100 |
-| [nano-ficha](https://huggingface.co/datasets/chonkie-ai/nano-ficha) | 55 | 100 |
-| [nano-macha](https://huggingface.co/datasets/chonkie-ai/nano-macha) | 93 | 100 |
-| [nano-cocha](https://huggingface.co/datasets/chonkie-ai/nano-cocha) | 94 | 100 |
-| [nano-tacha](https://huggingface.co/datasets/chonkie-ai/nano-tacha) | 87 | 100 |
-| [nano-sencha](https://huggingface.co/datasets/chonkie-ai/nano-sencha) | 86 | 100 |
-| [nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | 89 | 100 |
-| [nano-ryokucha](https://huggingface.co/datasets/chonkie-ai/nano-ryokucha) | 86 | 100 |
-| [nano-genmaicha](https://huggingface.co/datasets/chonkie-ai/nano-genmaicha) | 87 | 100 |
-| **Total** | **737** | **900** |
+| Dataset | Domain | Documents | Questions |
+|---------|--------|----------:|----------:|
+| [🧸 nano-gacha](https://huggingface.co/datasets/chonkie-ai/nano-gacha) | Classic Literature | 60 | 100 |
+| [💼 nano-ficha](https://huggingface.co/datasets/chonkie-ai/nano-ficha) | SEC Financial Filings | 55 | 100 |
+| [📝 nano-macha](https://huggingface.co/datasets/chonkie-ai/nano-macha) | GitHub READMEs | 93 | 100 |
+| [💻 nano-cocha](https://huggingface.co/datasets/chonkie-ai/nano-cocha) | Multilingual Code | 94 | 100 |
+| [📊 nano-tacha](https://huggingface.co/datasets/chonkie-ai/nano-tacha) | Financial Tables | 87 | 100 |
+| [🔬 nano-sencha](https://huggingface.co/datasets/chonkie-ai/nano-sencha) | Scientific Papers | 86 | 100 |
+| [⚖️ nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | Legal Contracts | 89 | 100 |
+| [🏥 nano-ryokucha](https://huggingface.co/datasets/chonkie-ai/nano-ryokucha) | Medical Guidelines | 86 | 100 |
+| [🎓 nano-genmaicha](https://huggingface.co/datasets/chonkie-ai/nano-genmaicha) | Lecture Transcripts | 87 | 100 |
+| | **Total** | **737** | **900** |
 
 Use `NanoBenchmark` for quick evaluations during development:
 
