@@ -95,6 +95,7 @@ def generate_nano_dataset(
     dataset_name: str,
     config: Dict,
     num_questions: int = 100,
+    min_documents: int = 5,
     seed: int = 42,
 ) -> Tuple[List[Dict], List[Dict]]:
     """Generate a nano version of a dataset with minimal documents.
@@ -102,13 +103,14 @@ def generate_nano_dataset(
     Strategy:
     1. Map each question to its containing document
     2. Rank documents by question count (most questions first)
-    3. Select fewest documents needed to get ≥num_questions
+    3. Select fewest documents needed to get ≥num_questions (but at least min_documents)
     4. Sample exactly num_questions from those documents
 
     Args:
         dataset_name: Name of the dataset
         config: Dataset configuration
         num_questions: Number of questions to sample
+        min_documents: Minimum number of documents to include
         seed: Random seed for reproducibility
 
     Returns:
@@ -161,7 +163,7 @@ def generate_nano_dataset(
     for doc_idx, q_list in docs_by_question_count[:5]:
         print(f"  Doc {doc_idx}: {len(q_list)} questions")
 
-    # Select fewest documents to get ≥num_questions
+    # Select fewest documents to get ≥num_questions (but at least min_documents)
     selected_doc_indices = []
     selected_question_indices = []
 
@@ -169,7 +171,8 @@ def generate_nano_dataset(
         selected_doc_indices.append(doc_idx)
         selected_question_indices.extend(q_list)
 
-        if len(selected_question_indices) >= num_questions:
+        # Stop when we have enough questions AND enough documents
+        if len(selected_question_indices) >= num_questions and len(selected_doc_indices) >= min_documents:
             break
 
     print(f"Selected {len(selected_doc_indices)} documents with {len(selected_question_indices)} questions")

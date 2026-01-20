@@ -114,8 +114,8 @@ For fast iteration and testing, MTCB provides a lightweight nano benchmark with 
 
 | Dataset | Domain | Documents | Questions |
 |---------|--------|----------:|----------:|
-| [🧸 nano-gacha](https://huggingface.co/datasets/chonkie-ai/nano-gacha) | Classic Literature | 4 | 100 |
-| [💼 nano-ficha](https://huggingface.co/datasets/chonkie-ai/nano-ficha) | SEC Financial Filings | 3 | 100 |
+| [🧸 nano-gacha](https://huggingface.co/datasets/chonkie-ai/nano-gacha) | Classic Literature | 5 | 100 |
+| [💼 nano-ficha](https://huggingface.co/datasets/chonkie-ai/nano-ficha) | SEC Financial Filings | 5 | 100 |
 | [📝 nano-macha](https://huggingface.co/datasets/chonkie-ai/nano-macha) | GitHub READMEs | 19 | 100 |
 | [💻 nano-cocha](https://huggingface.co/datasets/chonkie-ai/nano-cocha) | Multilingual Code | 26 | 100 |
 | [📊 nano-tacha](https://huggingface.co/datasets/chonkie-ai/nano-tacha) | Financial Tables | 11 | 100 |
@@ -123,7 +123,7 @@ For fast iteration and testing, MTCB provides a lightweight nano benchmark with 
 | [⚖️ nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | Legal Contracts | 8 | 100 |
 | [🏥 nano-ryokucha](https://huggingface.co/datasets/chonkie-ai/nano-ryokucha) | Medical Guidelines | 12 | 100 |
 | [🎓 nano-genmaicha](https://huggingface.co/datasets/chonkie-ai/nano-genmaicha) | Lecture Transcripts | 7 | 100 |
-| | **Total** | **102** | **900** |
+| | **Total** | **105** | **900** |
 
 Use `NanoBenchmark` for quick evaluations during development:
 
