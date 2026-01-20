@@ -54,7 +54,7 @@ def get_evaluator_class(dataset: str) -> type:
 
 
 # Available metrics
-AVAILABLE_METRICS = ["recall", "mrr"]
+AVAILABLE_METRICS = ["recall", "precision", "mrr", "ndcg"]
 
 
 @dataclass
@@ -75,7 +75,7 @@ class BenchmarkResult:
     chunker_config: str = ""
     embedding_model: str = ""
     k_values: List[int] = field(default_factory=list)
-    metrics: List[str] = field(default_factory=lambda: ["recall", "mrr"])
+    metrics: List[str] = field(default_factory=lambda: ["recall", "precision", "mrr", "ndcg"])
 
     @property
     def datasets(self) -> List[str]:
@@ -111,6 +111,36 @@ class BenchmarkResult:
             ]
             mean_mrr[k] = sum(mrrs) / len(mrrs) if mrrs else 0.0
         return mean_mrr
+
+    @property
+    def mean_precision(self) -> Dict[int, float]:
+        """Get mean Precision@k across all datasets."""
+        if not self.results:
+            return {}
+
+        mean_precision = {}
+        for k in self.k_values:
+            precisions = [
+                r.metrics.get("precision", {}).get(k, 0.0)
+                for r in self.results.values()
+            ]
+            mean_precision[k] = sum(precisions) / len(precisions) if precisions else 0.0
+        return mean_precision
+
+    @property
+    def mean_ndcg(self) -> Dict[int, float]:
+        """Get mean NDCG@k across all datasets."""
+        if not self.results:
+            return {}
+
+        mean_ndcg = {}
+        for k in self.k_values:
+            ndcgs = [
+                r.metrics.get("ndcg", {}).get(k, 0.0)
+                for r in self.results.values()
+            ]
+            mean_ndcg[k] = sum(ndcgs) / len(ndcgs) if ndcgs else 0.0
+        return mean_ndcg
 
     @property
     def total_evaluation_time(self) -> float:
@@ -149,8 +179,12 @@ class BenchmarkResult:
         }
         if "recall" in self.metrics:
             result["mean_recall"] = self.mean_recall
+        if "precision" in self.metrics:
+            result["mean_precision"] = self.mean_precision
         if "mrr" in self.metrics:
             result["mean_mrr"] = self.mean_mrr
+        if "ndcg" in self.metrics:
+            result["mean_ndcg"] = self.mean_ndcg
         return result
 
     def __str__(self) -> str:
@@ -167,8 +201,12 @@ class BenchmarkResult:
         header_cols = ""
         if "recall" in self.metrics:
             header_cols += "".join(f"{'R@' + str(k):>10}" for k in self.k_values)
+        if "precision" in self.metrics:
+            header_cols += "".join(f"{'P@' + str(k):>10}" for k in self.k_values)
         if "mrr" in self.metrics:
             header_cols += "".join(f"{'MRR@' + str(k):>10}" for k in self.k_values)
+        if "ndcg" in self.metrics:
+            header_cols += "".join(f"{'NDCG@' + str(k):>10}" for k in self.k_values)
         lines.append(f"{'Dataset':<15}{header_cols}")
         lines.append("-" * 70)
 
@@ -180,9 +218,19 @@ class BenchmarkResult:
                     f"{result.metrics.get('recall', {}).get(k, 0.0):>10.2%}"
                     for k in self.k_values
                 )
+            if "precision" in self.metrics:
+                row_vals += "".join(
+                    f"{result.metrics.get('precision', {}).get(k, 0.0):>10.4f}"
+                    for k in self.k_values
+                )
             if "mrr" in self.metrics:
                 row_vals += "".join(
                     f"{result.metrics.get('mrr', {}).get(k, 0.0):>10.4f}"
+                    for k in self.k_values
+                )
+            if "ndcg" in self.metrics:
+                row_vals += "".join(
+                    f"{result.metrics.get('ndcg', {}).get(k, 0.0):>10.4f}"
                     for k in self.k_values
                 )
             lines.append(f"{dataset.capitalize():<15}{row_vals}")
@@ -195,9 +243,19 @@ class BenchmarkResult:
                 f"{self.mean_recall.get(k, 0.0):>10.2%}"
                 for k in self.k_values
             )
+        if "precision" in self.metrics:
+            mean_vals += "".join(
+                f"{self.mean_precision.get(k, 0.0):>10.4f}"
+                for k in self.k_values
+            )
         if "mrr" in self.metrics:
             mean_vals += "".join(
                 f"{self.mean_mrr.get(k, 0.0):>10.4f}"
+                for k in self.k_values
+            )
+        if "ndcg" in self.metrics:
+            mean_vals += "".join(
+                f"{self.mean_ndcg.get(k, 0.0):>10.4f}"
                 for k in self.k_values
             )
         lines.append(f"{'MEAN':<15}{mean_vals}")

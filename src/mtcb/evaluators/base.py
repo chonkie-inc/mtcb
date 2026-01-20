@@ -28,6 +28,51 @@ def calculate_mrr(ranks: List[int]) -> float:
     return float(np.mean(reciprocal_ranks)) if reciprocal_ranks else 0.0
 
 
+def calculate_precision(ranks: List[int], k: int) -> float:
+    """Calculate Precision@k.
+
+    For single-relevant-item retrieval, precision@k is the fraction of
+    queries where the relevant item appears in top-k, divided by k.
+
+    Args:
+        ranks: List of ranks (1-indexed, 0 means not found)
+        k: The cutoff value
+
+    Returns:
+        Precision@k score
+
+    """
+    # For each query: 1/k if relevant item in top-k, else 0
+    precision_scores = [1.0 / k if 0 < rank <= k else 0.0 for rank in ranks]
+    return float(np.mean(precision_scores)) if precision_scores else 0.0
+
+
+def calculate_ndcg(ranks: List[int], k: int) -> float:
+    """Calculate NDCG@k (Normalized Discounted Cumulative Gain).
+
+    For binary relevance with a single relevant item per query:
+    - DCG@k = 1/log2(rank+1) if rank <= k, else 0
+    - IDCG@k = 1/log2(2) = 1 (ideal: relevant item at rank 1)
+    - NDCG@k = DCG@k / IDCG@k = 1/log2(rank+1) if rank <= k
+
+    Args:
+        ranks: List of ranks (1-indexed, 0 means not found)
+        k: The cutoff value
+
+    Returns:
+        NDCG@k score
+
+    """
+    ndcg_scores = []
+    for rank in ranks:
+        if 0 < rank <= k:
+            # DCG = 1/log2(rank+1), IDCG = 1, so NDCG = 1/log2(rank+1)
+            ndcg_scores.append(1.0 / np.log2(rank + 1))
+        else:
+            ndcg_scores.append(0.0)
+    return float(np.mean(ndcg_scores)) if ndcg_scores else 0.0
+
+
 class BaseEvaluator(ABC):
     """Base class for all evaluators with full evaluation pipeline.
 
@@ -243,17 +288,23 @@ class BaseEvaluator(ABC):
             total_questions / total_evaluation_time if total_evaluation_time > 0 else 0
         )
 
-        # Calculate MRR for each k value
+        # Calculate MRR, Precision, and NDCG for each k value
         mrr_by_k = {}
+        precision_by_k = {}
+        ndcg_by_k = {}
         for k_val in k_values:
             # For MRR@k, we cap ranks at k (ranks > k count as not found)
             capped_ranks = [r if r <= k_val else 0 for r in all_ranks]
             mrr_by_k[k_val] = calculate_mrr(capped_ranks)
+            precision_by_k[k_val] = calculate_precision(all_ranks, k_val)
+            ndcg_by_k[k_val] = calculate_ndcg(all_ranks, k_val)
 
         # Build metrics dictionary
         metrics = {
             "recall": {k_val: correct_counts[k_val] / total_questions for k_val in k_values},
+            "precision": precision_by_k,
             "mrr": mrr_by_k,
+            "ndcg": ndcg_by_k,
         }
 
         # Build metadata
