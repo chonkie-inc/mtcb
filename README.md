@@ -110,20 +110,20 @@ The full MTCB benchmark contains 16,974 questions across 3,202 documents spannin
 
 ### Nano Benchmark
 
-For fast iteration and testing, MTCB provides a lightweight nano benchmark with ~100 questions per dataset:
+For fast iteration and testing, MTCB provides a lightweight nano benchmark with ~100 questions per dataset. Documents are selected to maximize question density (fewest documents needed for 100 questions):
 
 | Dataset | Domain | Documents | Questions |
 |---------|--------|----------:|----------:|
-| [🧸 nano-gacha](https://huggingface.co/datasets/chonkie-ai/nano-gacha) | Classic Literature | 60 | 100 |
-| [💼 nano-ficha](https://huggingface.co/datasets/chonkie-ai/nano-ficha) | SEC Financial Filings | 55 | 100 |
-| [📝 nano-macha](https://huggingface.co/datasets/chonkie-ai/nano-macha) | GitHub READMEs | 93 | 100 |
-| [💻 nano-cocha](https://huggingface.co/datasets/chonkie-ai/nano-cocha) | Multilingual Code | 94 | 100 |
-| [📊 nano-tacha](https://huggingface.co/datasets/chonkie-ai/nano-tacha) | Financial Tables | 87 | 100 |
-| [🔬 nano-sencha](https://huggingface.co/datasets/chonkie-ai/nano-sencha) | Scientific Papers | 86 | 100 |
-| [⚖️ nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | Legal Contracts | 89 | 100 |
-| [🏥 nano-ryokucha](https://huggingface.co/datasets/chonkie-ai/nano-ryokucha) | Medical Guidelines | 86 | 100 |
-| [🎓 nano-genmaicha](https://huggingface.co/datasets/chonkie-ai/nano-genmaicha) | Lecture Transcripts | 87 | 100 |
-| | **Total** | **737** | **900** |
+| [🧸 nano-gacha](https://huggingface.co/datasets/chonkie-ai/nano-gacha) | Classic Literature | 4 | 100 |
+| [💼 nano-ficha](https://huggingface.co/datasets/chonkie-ai/nano-ficha) | SEC Financial Filings | 3 | 100 |
+| [📝 nano-macha](https://huggingface.co/datasets/chonkie-ai/nano-macha) | GitHub READMEs | 19 | 100 |
+| [💻 nano-cocha](https://huggingface.co/datasets/chonkie-ai/nano-cocha) | Multilingual Code | 26 | 100 |
+| [📊 nano-tacha](https://huggingface.co/datasets/chonkie-ai/nano-tacha) | Financial Tables | 11 | 100 |
+| [🔬 nano-sencha](https://huggingface.co/datasets/chonkie-ai/nano-sencha) | Scientific Papers | 12 | 100 |
+| [⚖️ nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | Legal Contracts | 8 | 100 |
+| [🏥 nano-ryokucha](https://huggingface.co/datasets/chonkie-ai/nano-ryokucha) | Medical Guidelines | 12 | 100 |
+| [🎓 nano-genmaicha](https://huggingface.co/datasets/chonkie-ai/nano-genmaicha) | Lecture Transcripts | 7 | 100 |
+| | **Total** | **102** | **900** |
 
 Use `NanoBenchmark` for quick evaluations during development:
 
