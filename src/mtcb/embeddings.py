@@ -1,4 +1,4 @@
-"""Embedding providers for Judie using Catsu."""
+"""Embedding providers for MTCB using Catsu."""
 
 from typing import List, Optional, Union
 

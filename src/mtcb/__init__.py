@@ -1,4 +1,4 @@
-"""Main module for Judie - Evaluate chunk quality for RAG systems."""
+"""Main module for MTCB - Make That Chunker Better! Evaluate chunk quality for RAG systems."""
 
 from .cache import EvalCache
 from .dataset import (

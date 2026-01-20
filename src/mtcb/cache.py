@@ -1,4 +1,4 @@
-"""Caching utilities for Judie evaluations."""
+"""Caching utilities for MTCB evaluations."""
 
 import hashlib
 import json

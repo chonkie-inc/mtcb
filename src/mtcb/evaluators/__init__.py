@@ -1,4 +1,4 @@
-"""Judie's Evaluators package."""
+"""MTCB's Evaluators package."""
 
 from .base import BaseEvaluator
 from .simple import SimpleEvaluator

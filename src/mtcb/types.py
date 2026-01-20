@@ -1,4 +1,4 @@
-"""Types for Judie."""
+"""Types for MTCB."""
 
 import json
 import time

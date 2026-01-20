@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "judie"
+name = "mtcb"
 version = "0.0.3"
-description = "Judge and evaluate your chunk quality with Judie, the Owl! Quick, easy, and effective!"
+description = "MTCB - Make That Chunker Better! Evaluate your RAG chunking with ease."
 readme = "README.md"
 license = "Apache-2.0"
 authors = [
@@ -57,10 +57,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/chonkie-inc/judie"
-Repository = "https://github.com/chonkie-inc/judie"
-Documentation = "https://github.com/chonkie-inc/judie#readme"
-"Bug Tracker" = "https://github.com/chonkie-inc/judie/issues"
+Homepage = "https://github.com/chonkie-inc/mtcb"
+Repository = "https://github.com/chonkie-inc/mtcb"
+Documentation = "https://github.com/chonkie-inc/mtcb#readme"
+"Bug Tracker" = "https://github.com/chonkie-inc/mtcb/issues"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

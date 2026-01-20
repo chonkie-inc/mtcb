@@ -1,4 +1,4 @@
-"""Dataset generation module for Judie.
+"""Dataset generation module for MTCB.
 
 This module provides tools for generating verified QA datasets from documents,
 with support for LLM-based semantic deduplication and customizable validation.
