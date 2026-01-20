@@ -41,7 +41,7 @@ class MachaEvaluator(BaseEvaluator):
         corpus_data = load_dataset("chonkie-ai/macha", "corpus", split="train")
         questions_data = load_dataset("chonkie-ai/macha", "questions", split="train")
 
-        self.corpus = [doc.get("text", doc.get("content", "")) for doc in corpus_data]
+        self.corpus = [doc.get("readme", doc.get("text", "")) for doc in corpus_data]
         self.questions = [q["question"] for q in questions_data]
         self.relevant_passages = [
             q.get("chunk-must-contain", q.get("supporting_passage", ""))
