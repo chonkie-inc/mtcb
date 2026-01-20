@@ -105,14 +105,14 @@ MTCB calculates:
 |---------|--------|----------:|----------:|
 | [🧸 Gacha](https://huggingface.co/datasets/chonkie-ai/gacha) | Classic Literature (Gutenberg) | 100 | 2,884 |
 | [💼 Ficha](https://huggingface.co/datasets/chonkie-ai/ficha) | SEC Financial Filings | 88 | 1,331 |
-| [📝 Macha](https://huggingface.co/datasets/chonkie-ai/macha) | GitHub READMEs | 957 | 635 |
+| [📝 Macha](https://huggingface.co/datasets/chonkie-ai/macha) | GitHub READMEs | 445 | 1,812 |
 | [💻 Cocha](https://huggingface.co/datasets/chonkie-ai/cocha) | Multilingual Code | 1,000 | 2,372 |
 | [📊 Tacha](https://huggingface.co/datasets/chonkie-ai/tacha) | Financial Tables (TAT-QA) | 349 | 2,065 |
 | [🔬 Sencha](https://huggingface.co/datasets/chonkie-ai/sencha) | Scientific Papers (QASPER) | 250 | 1,146 |
 | [⚖️ Hojicha](https://huggingface.co/datasets/chonkie-ai/hojicha) | Legal Contracts (CUAD) | 479 | 1,982 |
 | [🏥 Ryokucha](https://huggingface.co/datasets/chonkie-ai/ryokucha) | Medical Guidelines (NICE/CDC/WHO) | 241 | 1,351 |
 | [🎓 Genmaicha](https://huggingface.co/datasets/chonkie-ai/genmaicha) | MIT OCW Lecture Transcripts | 250 | 2,193 |
-| | **Total** | **3,714** | **15,959** |
+| | **Total** | **3,202** | **17,136** |
 
 
 ## 📚 Citation
