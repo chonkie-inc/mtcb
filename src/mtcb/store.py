@@ -1,7 +1,7 @@
 """This module contains the SimpleVectorStore class for storing and retrieving embeddings."""
 
 import numpy as np
-from typing import List, Optional, Tuple
+from typing import Any, List, Optional, Tuple
 
 class SimpleVectorStore:
   """A simple in-memory vector store that stores embeddings and metadata. 
@@ -13,7 +13,7 @@ class SimpleVectorStore:
     self.metadata = []      # Will store metadata as a list of dicts
     self._normalized_embeddings = None # To store normalized embeddings for efficient search
 
-  def add(self, embedding: np.ndarray, metadata: Optional[dict] = None) -> None:
+  def add(self, embedding: np.ndarray, metadata: Optional[Any] = None) -> None:
     """
     Adds an embedding and its associated metadata to the store.
 
@@ -29,7 +29,7 @@ class SimpleVectorStore:
     self.metadata.append(metadata)
     self._normalized_embeddings = None # Invalidate normalized embeddings
 
-  def add_batch(self, embeddings: List[np.ndarray], metadata: Optional[List[dict]] = None) -> None:
+  def add_batch(self, embeddings: List[np.ndarray], metadata: Optional[List[Any]] = None) -> None:
     """
     Adds a batch of embeddings and their associated metadata to the store.
 
@@ -57,7 +57,7 @@ class SimpleVectorStore:
     else:
         self._normalized_embeddings = None
 
-  def query(self, query_embedding: np.ndarray, k: int = 5, return_score: bool = False) -> List[Tuple[int, float, dict]]:
+  def query(self, query_embedding: np.ndarray, k: int = 5, return_score: bool = False) -> List[Tuple[int, float, Any]]:
     """
     Searches for the top K nearest neighbors to the query embedding.
 
