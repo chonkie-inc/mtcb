@@ -7,6 +7,7 @@ from .macha import MachaEvaluator
 from .ficha import FichaEvaluator
 from .cocha import CochaEvaluator
 from .tacha import TachaEvaluator
+from .sencha import SenchaEvaluator
 
 __all__ = [
     "BaseEvaluator",
@@ -16,4 +17,5 @@ __all__ = [
     "FichaEvaluator",
     "CochaEvaluator",
     "TachaEvaluator",
+    "SenchaEvaluator",
 ]
