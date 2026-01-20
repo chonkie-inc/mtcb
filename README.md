@@ -30,9 +30,8 @@ from chonkie import RecursiveChunker
 # Initialize the evaluator with your chunker
 evaluator = GachaEvaluator(
     chunker=RecursiveChunker(chunk_size=1000),
-    embedding_model="voyage-3-large",  # Uses Catsu for embeddings
-    tokenizer="auto",  # Auto-detect tokenizer from model
-    cache_dir="./cache"  # Cache embeddings for faster re-runs
+    embedding_model="voyage-3-large",
+    cache_dir="./cache"
 )
 
 # Evaluate your chunks
@@ -81,17 +80,6 @@ for sample in result.samples:
     print(f"Q: {sample.question}")
     print(f"A: {sample.answer}")
 ```
-
-### Supported Embedding Models
-
-MTCB uses [Catsu](https://github.com/chonkie-inc/catsu) under the hood, which supports:
-
-- **Voyage AI**: `voyage-3-large`, `voyage-3`, `voyage-code-3`, etc.
-- **OpenAI**: `text-embedding-3-large`, `text-embedding-3-small`
-- **Cohere**: `embed-english-v3.0`, `embed-multilingual-v3.0`
-- **Jina**: `jina-embeddings-v3`, `jina-embeddings-v2-base-en`
-
-For backward compatibility, `model2vec://` prefixed models are also supported.
 
 ### Metrics
 
