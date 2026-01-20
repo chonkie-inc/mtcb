@@ -9,6 +9,7 @@ from .cocha import CochaEvaluator
 from .tacha import TachaEvaluator
 from .sencha import SenchaEvaluator
 from .hojicha import HojichaEvaluator
+from .ryokucha import RyokuchaEvaluator
 
 __all__ = [
     "BaseEvaluator",
@@ -20,4 +21,5 @@ __all__ = [
     "TachaEvaluator",
     "SenchaEvaluator",
     "HojichaEvaluator",
+    "RyokuchaEvaluator",
 ]

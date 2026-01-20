@@ -16,7 +16,7 @@ from .dataset import (
     LLMDeduplicator,
 )
 from .embeddings import CatsuEmbeddings, get_embeddings, get_tokenizer_for_model, TOKENIZER_MAP
-from .evaluators import BaseEvaluator, SimpleEvaluator, GachaEvaluator, MachaEvaluator, FichaEvaluator, CochaEvaluator, TachaEvaluator, SenchaEvaluator, HojichaEvaluator
+from .evaluators import BaseEvaluator, SimpleEvaluator, GachaEvaluator, MachaEvaluator, FichaEvaluator, CochaEvaluator, TachaEvaluator, SenchaEvaluator, HojichaEvaluator, RyokuchaEvaluator
 from .store import SimpleVectorStore
 from .types import EvalResult
 
@@ -39,6 +39,7 @@ __all__ = [
     "TachaEvaluator",
     "SenchaEvaluator",
     "HojichaEvaluator",
+    "RyokuchaEvaluator",
     # Embeddings
     "CatsuEmbeddings",
     "get_embeddings",

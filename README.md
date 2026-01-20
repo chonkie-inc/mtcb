@@ -110,7 +110,8 @@ MTCB calculates:
 | [📊 Tacha](https://huggingface.co/datasets/chonkie-ai/tacha) | Financial Tables (TAT-QA) | 349 | 2,065 |
 | [🔬 Sencha](https://huggingface.co/datasets/chonkie-ai/sencha) | Scientific Papers (QASPER) | 250 | 1,146 |
 | [⚖️ Hojicha](https://huggingface.co/datasets/chonkie-ai/hojicha) | Legal Contracts (CUAD) | 479 | 1,982 |
-| | **Total** | **5,223** | **12,671** |
+| [🏥 Ryokucha](https://huggingface.co/datasets/chonkie-ai/ryokucha) | Medical Guidelines (NICE/CDC/WHO) | 241 | 1,351 |
+| | **Total** | **5,464** | **14,022** |
 
 
 ## 📚 Citation
