@@ -101,9 +101,15 @@ MTCB calculates:
 
 ## 🧩 Available Benchmarks
 
-| Benchmark | Description |
-|-----------|-------------|
-| [🧸 Gacha](https://huggingface.co/datasets/chonkie-ai/gacha) | 🧸 Gacha is a corpus of 100 most popular textbooks from Gutenberg Corpus and numerous NIAH-style questions for evaluating chunking algorithms! |
+| Dataset | Domain | Documents | Questions |
+|---------|--------|----------:|----------:|
+| [🧸 Gacha](https://huggingface.co/datasets/chonkie-ai/gacha) | Classic Literature (Gutenberg) | 100 | 2,884 |
+| [💼 Ficha](https://huggingface.co/datasets/chonkie-ai/ficha) | SEC Financial Filings | 88 | 1,331 |
+| [📝 Macha](https://huggingface.co/datasets/chonkie-ai/macha) | GitHub READMEs | 957 | 635 |
+| [💻 Cocha](https://huggingface.co/datasets/chonkie-ai/cocha) | Multilingual Code | 3,000 | 2,628 |
+| [📊 Tacha](https://huggingface.co/datasets/chonkie-ai/tacha) | Financial Tables (TAT-QA) | 349 | 2,065 |
+| [🔬 Sencha](https://huggingface.co/datasets/chonkie-ai/sencha) | Scientific Papers (QASPER) | 250 | 1,146 |
+| | **Total** | **4,744** | **10,689** |
 
 
 ## 📚 Citation
