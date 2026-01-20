@@ -53,6 +53,10 @@ def get_evaluator_class(dataset: str) -> type:
     return _EVALUATOR_REGISTRY[dataset_lower]
 
 
+# Available metrics
+AVAILABLE_METRICS = ["recall", "mrr"]
+
+
 @dataclass
 class BenchmarkResult:
     """Results from running a benchmark across multiple datasets.
@@ -63,6 +67,7 @@ class BenchmarkResult:
         chunker_config: String representation of the chunker used
         embedding_model: Name of the embedding model used
         k_values: The k values that were evaluated
+        metrics: List of metrics that were evaluated (e.g., ["recall", "mrr"])
     """
 
     name: str
@@ -70,6 +75,7 @@ class BenchmarkResult:
     chunker_config: str = ""
     embedding_model: str = ""
     k_values: List[int] = field(default_factory=list)
+    metrics: List[str] = field(default_factory=lambda: ["recall", "mrr"])
 
     @property
     def datasets(self) -> List[str]:
@@ -127,61 +133,74 @@ class BenchmarkResult:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
-        return {
+        result = {
             "name": self.name,
             "chunker_config": self.chunker_config,
             "embedding_model": self.embedding_model,
             "k_values": self.k_values,
-            "mean_recall": self.mean_recall,
-            "mean_mrr": self.mean_mrr,
+            "metrics": self.metrics,
             "total_evaluation_time": self.total_evaluation_time,
             "total_chunks_created": self.total_chunks_created,
             "total_corpus_size_mb": self.total_corpus_size_mb,
             "results": {
-                name: result.to_dict()
-                for name, result in self.results.items()
+                name: r.to_dict()
+                for name, r in self.results.items()
             },
         }
+        if "recall" in self.metrics:
+            result["mean_recall"] = self.mean_recall
+        if "mrr" in self.metrics:
+            result["mean_mrr"] = self.mean_mrr
+        return result
 
     def __str__(self) -> str:
         """Pretty string representation."""
         lines = []
         lines.append("=" * 70)
-        lines.append(f"{self.name} BENCHMARK RESULTS")
+        lines.append(f"{self.name}")
         lines.append("=" * 70)
         lines.append(f"Chunker: {self.chunker_config}")
         lines.append(f"Embedding: {self.embedding_model}")
         lines.append("-" * 70)
 
-        # Header row
-        k_cols = "".join(f"{'R@' + str(k):>10}" for k in self.k_values)
-        mrr_cols = "".join(f"{'MRR@' + str(k):>10}" for k in self.k_values)
-        lines.append(f"{'Dataset':<15}{k_cols}{mrr_cols}")
+        # Build header based on selected metrics
+        header_cols = ""
+        if "recall" in self.metrics:
+            header_cols += "".join(f"{'R@' + str(k):>10}" for k in self.k_values)
+        if "mrr" in self.metrics:
+            header_cols += "".join(f"{'MRR@' + str(k):>10}" for k in self.k_values)
+        lines.append(f"{'Dataset':<15}{header_cols}")
         lines.append("-" * 70)
 
         # Per-dataset rows
         for dataset, result in self.results.items():
-            recall_vals = "".join(
-                f"{result.metrics.get('recall', {}).get(k, 0.0):>10.2%}"
-                for k in self.k_values
-            )
-            mrr_vals = "".join(
-                f"{result.metrics.get('mrr', {}).get(k, 0.0):>10.4f}"
-                for k in self.k_values
-            )
-            lines.append(f"{dataset.capitalize():<15}{recall_vals}{mrr_vals}")
+            row_vals = ""
+            if "recall" in self.metrics:
+                row_vals += "".join(
+                    f"{result.metrics.get('recall', {}).get(k, 0.0):>10.2%}"
+                    for k in self.k_values
+                )
+            if "mrr" in self.metrics:
+                row_vals += "".join(
+                    f"{result.metrics.get('mrr', {}).get(k, 0.0):>10.4f}"
+                    for k in self.k_values
+                )
+            lines.append(f"{dataset.capitalize():<15}{row_vals}")
 
         # Mean row
         lines.append("-" * 70)
-        mean_recall_vals = "".join(
-            f"{self.mean_recall.get(k, 0.0):>10.2%}"
-            for k in self.k_values
-        )
-        mean_mrr_vals = "".join(
-            f"{self.mean_mrr.get(k, 0.0):>10.4f}"
-            for k in self.k_values
-        )
-        lines.append(f"{'MEAN':<15}{mean_recall_vals}{mean_mrr_vals}")
+        mean_vals = ""
+        if "recall" in self.metrics:
+            mean_vals += "".join(
+                f"{self.mean_recall.get(k, 0.0):>10.2%}"
+                for k in self.k_values
+            )
+        if "mrr" in self.metrics:
+            mean_vals += "".join(
+                f"{self.mean_mrr.get(k, 0.0):>10.4f}"
+                for k in self.k_values
+            )
+        lines.append(f"{'MEAN':<15}{mean_vals}")
 
         # Stats
         lines.append("-" * 70)
@@ -257,6 +276,7 @@ class Benchmark:
         chunker: Any,
         embedding_model: Union[str, Any] = "voyage-3-large",
         k: Union[int, List[int]] = [1, 3, 5, 10],
+        metrics: Optional[List[str]] = None,
         tokenizer: Optional[str] = "auto",
         cache_dir: Optional[str] = None,
         show_progress_bar: bool = True,
@@ -266,7 +286,9 @@ class Benchmark:
         Args:
             chunker: The chunker to evaluate
             embedding_model: Embedding model to use (default: "voyage-3-large")
-            k: K values for recall/MRR evaluation
+            k: K values for evaluation
+            metrics: List of metrics to compute. Options: "recall", "mrr".
+                Default is ["recall", "mrr"] (both).
             tokenizer: Tokenizer for chunking ("auto" to detect from model)
             cache_dir: Directory for caching (None to disable)
             show_progress_bar: Whether to show progress bars
@@ -275,6 +297,18 @@ class Benchmark:
             BenchmarkResult containing results for all datasets
         """
         k_values = [k] if isinstance(k, int) else k
+
+        # Default to all metrics
+        if metrics is None:
+            metrics = AVAILABLE_METRICS.copy()
+        else:
+            # Validate metrics
+            for m in metrics:
+                if m.lower() not in AVAILABLE_METRICS:
+                    raise ValueError(
+                        f"Unknown metric: '{m}'. Available: {AVAILABLE_METRICS}"
+                    )
+            metrics = [m.lower() for m in metrics]
 
         results = {}
 
@@ -309,6 +343,7 @@ class Benchmark:
             chunker_config=chunker_config,
             embedding_model=model_name,
             k_values=k_values,
+            metrics=metrics,
         )
 
         print(f"\n{benchmark_result}")

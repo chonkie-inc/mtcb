@@ -1,6 +1,7 @@
 """Main module for MTCB - Make That Chunker Better! Evaluate chunk quality for RAG systems."""
 
 from .benchmark import (
+    AVAILABLE_METRICS,
     Benchmark,
     BenchmarkResult,
     get_available_datasets,
@@ -24,6 +25,7 @@ __version__ = "0.0.3"
 __all__ = [
     "__version__",
     # Benchmark
+    "AVAILABLE_METRICS",
     "Benchmark",
     "BenchmarkResult",
     "get_available_datasets",
