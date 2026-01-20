@@ -91,9 +91,13 @@ MTCB calculates:
 
 ## 🧩 Available Benchmarks
 
+### Full Benchmark
+
+The full MTCB benchmark contains 16,974 questions across 3,202 documents spanning 9 diverse domains:
+
 | Dataset | Domain | Documents | Questions |
 |---------|--------|----------:|----------:|
-| [🧸 Gacha](https://huggingface.co/datasets/chonkie-ai/gacha) | Classic Literature (Gutenberg) | 100 | 2,884 |
+| [🧸 Gacha](https://huggingface.co/datasets/chonkie-ai/gacha) | Classic Literature (Gutenberg) | 100 | 2,878 |
 | [💼 Ficha](https://huggingface.co/datasets/chonkie-ai/ficha) | SEC Financial Filings | 88 | 1,331 |
 | [📝 Macha](https://huggingface.co/datasets/chonkie-ai/macha) | GitHub READMEs | 445 | 1,812 |
 | [💻 Cocha](https://huggingface.co/datasets/chonkie-ai/cocha) | Multilingual Code | 1,000 | 2,372 |
@@ -101,8 +105,40 @@ MTCB calculates:
 | [🔬 Sencha](https://huggingface.co/datasets/chonkie-ai/sencha) | Scientific Papers (QASPER) | 250 | 1,146 |
 | [⚖️ Hojicha](https://huggingface.co/datasets/chonkie-ai/hojicha) | Legal Contracts (CUAD) | 479 | 1,982 |
 | [🏥 Ryokucha](https://huggingface.co/datasets/chonkie-ai/ryokucha) | Medical Guidelines (NICE/CDC/WHO) | 241 | 1,351 |
-| [🎓 Genmaicha](https://huggingface.co/datasets/chonkie-ai/genmaicha) | MIT OCW Lecture Transcripts | 250 | 2,193 |
-| | **Total** | **3,202** | **17,136** |
+| [🎓 Genmaicha](https://huggingface.co/datasets/chonkie-ai/genmaicha) | MIT OCW Lecture Transcripts | 250 | 2,037 |
+| | **Total** | **3,202** | **16,974** |
+
+### Nano Benchmark
+
+For fast iteration and testing, MTCB provides a lightweight nano benchmark with ~100 questions per dataset:
+
+| Dataset | Documents | Questions |
+|---------|----------:|----------:|
+| [nano-gacha](https://huggingface.co/datasets/chonkie-ai/nano-gacha) | 60 | 100 |
+| [nano-ficha](https://huggingface.co/datasets/chonkie-ai/nano-ficha) | 55 | 100 |
+| [nano-macha](https://huggingface.co/datasets/chonkie-ai/nano-macha) | 93 | 100 |
+| [nano-cocha](https://huggingface.co/datasets/chonkie-ai/nano-cocha) | 94 | 100 |
+| [nano-tacha](https://huggingface.co/datasets/chonkie-ai/nano-tacha) | 87 | 100 |
+| [nano-sencha](https://huggingface.co/datasets/chonkie-ai/nano-sencha) | 86 | 100 |
+| [nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | 89 | 100 |
+| [nano-ryokucha](https://huggingface.co/datasets/chonkie-ai/nano-ryokucha) | 86 | 100 |
+| [nano-genmaicha](https://huggingface.co/datasets/chonkie-ai/nano-genmaicha) | 87 | 100 |
+| **Total** | **737** | **900** |
+
+Use `NanoBenchmark` for quick evaluations during development:
+
+```python
+from mtcb import NanoBenchmark
+from chonkie import RecursiveChunker
+
+benchmark = NanoBenchmark()
+result = benchmark.evaluate(
+    chunker=RecursiveChunker(chunk_size=512),
+    embedding_model="voyage-3-large",
+    k=[1, 5, 10],
+)
+print(result)
+```
 
 
 ## 📚 Citation
