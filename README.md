@@ -102,11 +102,11 @@ The full MTCB benchmark contains 16,974 questions across 3,202 documents spannin
 | [📝 Macha](https://huggingface.co/datasets/chonkie-ai/macha) | GitHub READMEs | 445 | 1,812 |
 | [💻 Cocha](https://huggingface.co/datasets/chonkie-ai/cocha) | Multilingual Code | 1,000 | 2,372 |
 | [📊 Tacha](https://huggingface.co/datasets/chonkie-ai/tacha) | Financial Tables (TAT-QA) | 349 | 2,065 |
-| [🔬 Sencha](https://huggingface.co/datasets/chonkie-ai/sencha) | Scientific Papers (QASPER) | 250 | 1,146 |
-| [⚖️ Hojicha](https://huggingface.co/datasets/chonkie-ai/hojicha) | Legal Contracts (CUAD) | 479 | 1,982 |
+| [🔬 Sencha](https://huggingface.co/datasets/chonkie-ai/sencha) | Scientific Papers (QASPER) | 243 | 1,507 |
+| [⚖️ Hojicha](https://huggingface.co/datasets/chonkie-ai/hojicha) | Legal Contracts (CUAD) | 194 | 1,568 |
 | [🏥 Ryokucha](https://huggingface.co/datasets/chonkie-ai/ryokucha) | Medical Guidelines (NICE/CDC/WHO) | 241 | 1,351 |
 | [🎓 Genmaicha](https://huggingface.co/datasets/chonkie-ai/genmaicha) | MIT OCW Lecture Transcripts | 250 | 2,037 |
-| | **Total** | **3,202** | **16,974** |
+| | **Total** | **2,910** | **16,921** |
 
 ### Nano Benchmark
 
@@ -119,11 +119,11 @@ For fast iteration and testing, MTCB provides a lightweight nano benchmark with 
 | [📝 nano-macha](https://huggingface.co/datasets/chonkie-ai/nano-macha) | GitHub READMEs | 19 | 100 |
 | [💻 nano-cocha](https://huggingface.co/datasets/chonkie-ai/nano-cocha) | Multilingual Code | 26 | 100 |
 | [📊 nano-tacha](https://huggingface.co/datasets/chonkie-ai/nano-tacha) | Financial Tables | 11 | 100 |
-| [🔬 nano-sencha](https://huggingface.co/datasets/chonkie-ai/nano-sencha) | Scientific Papers | 12 | 100 |
-| [⚖️ nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | Legal Contracts | 8 | 100 |
+| [🔬 nano-sencha](https://huggingface.co/datasets/chonkie-ai/nano-sencha) | Scientific Papers | 13 | 100 |
+| [⚖️ nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | Legal Contracts | 10 | 100 |
 | [🏥 nano-ryokucha](https://huggingface.co/datasets/chonkie-ai/nano-ryokucha) | Medical Guidelines | 12 | 100 |
 | [🎓 nano-genmaicha](https://huggingface.co/datasets/chonkie-ai/nano-genmaicha) | Lecture Transcripts | 7 | 100 |
-| | **Total** | **105** | **900** |
+| | **Total** | **108** | **900** |
 
 Use `NanoBenchmark` for quick evaluations during development:
 
