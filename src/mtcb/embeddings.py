@@ -187,12 +187,15 @@ class CatsuEmbeddings:
 
         for i in iterator:
             batch = texts[i:i + batch_size]
-            response = self.client.embed(
-                model=self.model,
-                input=batch,
-                input_type=input_type,
-            )
-            all_embeddings.extend([np.array(emb) for emb in response.embeddings])
+            try:
+                response = self.client.embed(
+                    model=self.model,
+                    input=batch,
+                    input_type=input_type,
+                )
+                all_embeddings.extend([np.array(emb) for emb in response.embeddings])
+            except Exception as e:
+                print(f"Embedding batch failed at index {i}: {e}")
 
         return all_embeddings
 
