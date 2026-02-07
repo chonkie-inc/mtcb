@@ -11,6 +11,7 @@ class DatasetPromptTemplate:
         generation_template: Template for generating QA pairs from chunks.
         deduplication_template: Template for LLM-based deduplication.
         name: Optional name for the template preset.
+
     """
 
     generation_template: str

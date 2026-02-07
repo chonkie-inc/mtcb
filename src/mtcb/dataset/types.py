@@ -16,6 +16,7 @@ class GeneratedSample(BaseModel):
         document_id: ID of the source document.
         chunk_id: ID of the source chunk.
         verified: Whether the chunk_must_contain was validated.
+
     """
 
     question: str
@@ -37,6 +38,7 @@ class GenerationResult:
         failed_validation_count: Number of samples that failed validation.
         duplicate_count: Number of samples removed as duplicates.
         generation_time_seconds: Total time taken for generation.
+
     """
 
     samples: List[GeneratedSample] = field(default_factory=list)

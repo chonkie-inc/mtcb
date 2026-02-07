@@ -77,8 +77,7 @@ class NanoMachaEvaluator(BaseEvaluator):
         self.corpus = [doc["text"] for doc in corpus_data]
         self.questions = [q["question"] for q in questions_data]
         self.relevant_passages = [
-            q.get("chunk-must-contain", q.get("supporting_passage", ""))
-            for q in questions_data
+            q.get("chunk-must-contain", q.get("supporting_passage", "")) for q in questions_data
         ]
 
         print(f"Loaded {len(self.corpus)} READMEs and {len(self.questions)} questions")
@@ -109,7 +108,18 @@ class NanoCochaEvaluator(BaseEvaluator):
     def _get_extra_metadata(self) -> Dict[str, Any]:
         """Add language metadata for Cocha."""
         return {
-            "languages": ["python", "javascript", "typescript", "java", "go", "rust", "c++", "c", "ruby", "php"],
+            "languages": [
+                "python",
+                "javascript",
+                "typescript",
+                "java",
+                "go",
+                "rust",
+                "c++",
+                "c",
+                "ruby",
+                "php",
+            ],
         }
 
 

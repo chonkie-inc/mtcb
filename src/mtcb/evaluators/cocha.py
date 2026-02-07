@@ -52,5 +52,16 @@ class CochaEvaluator(BaseEvaluator):
     def _get_extra_metadata(self) -> Dict[str, Any]:
         """Add language metadata for Cocha."""
         return {
-            "languages": ["python", "javascript", "typescript", "java", "go", "rust", "c++", "c", "ruby", "php"],
+            "languages": [
+                "python",
+                "javascript",
+                "typescript",
+                "java",
+                "go",
+                "rust",
+                "c++",
+                "c",
+                "ruby",
+                "php",
+            ],
         }

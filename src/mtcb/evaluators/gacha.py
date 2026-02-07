@@ -1,6 +1,5 @@
 """Gacha evaluator for Books/Literature corpus."""
 
-
 from datasets import load_dataset
 
 from ..benchmark import register_evaluator

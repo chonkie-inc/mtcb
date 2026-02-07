@@ -22,6 +22,7 @@ class SampleDeduplicator(Protocol):
 
         Returns:
             List of unique samples.
+
         """
         ...
 
@@ -54,6 +55,7 @@ class LLMDeduplicator:
             batch_size: Number of samples to process in each batch.
             max_passes: Maximum number of deduplication passes.
             deduplication_prompt: Custom prompt template (optional).
+
         """
         self.genie = genie
         self.batch_size = batch_size
@@ -111,16 +113,12 @@ Return JSON with:
 
         return unique_samples
 
-    def _deduplicate_batch(
-        self, samples: list[GeneratedSample]
-    ) -> list[GeneratedSample]:
+    def _deduplicate_batch(self, samples: list[GeneratedSample]) -> list[GeneratedSample]:
         """Deduplicate a single batch of samples."""
         if len(samples) <= 1:
             return samples
 
-        questions_data = [
-            {"index": i, "question": s.question} for i, s in enumerate(samples)
-        ]
+        questions_data = [{"index": i, "question": s.question} for i, s in enumerate(samples)]
         questions_json = json.dumps(questions_data, indent=2)
 
         prompt = self.deduplication_prompt.format(questions_json=questions_json)
@@ -131,9 +129,7 @@ Return JSON with:
             # Extract unique indices
             if "unique_indices" in result:
                 unique_indices = set(result["unique_indices"])
-                return [
-                    samples[i] for i in sorted(unique_indices) if i < len(samples)
-                ]
+                return [samples[i] for i in sorted(unique_indices) if i < len(samples)]
 
             # Fallback: extract one from each group
             if "groups" in result:
@@ -141,9 +137,7 @@ Return JSON with:
                 for group in result["groups"]:
                     if group:
                         unique_indices.add(group[0])
-                return [
-                    samples[i] for i in sorted(unique_indices) if i < len(samples)
-                ]
+                return [samples[i] for i in sorted(unique_indices) if i < len(samples)]
 
         except Exception:
             # On failure, return original samples
@@ -169,6 +163,7 @@ class EmbeddingDeduplicator:
         Args:
             embedding_model: Name of the embedding model to use.
             similarity_threshold: Cosine similarity threshold for duplicates.
+
         """
         self.embedding_model = embedding_model
         self.similarity_threshold = similarity_threshold

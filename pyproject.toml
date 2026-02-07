@@ -75,7 +75,7 @@ where = ["src"]
 [tool.ruff]
 line-length = 99
 lint.select = ["B904", "F", "I", "D"]
-lint.ignore = ["D211", "D213", "D203"]
+lint.ignore = ["D105", "D107", "D203", "D211", "D213", "D401", "D404", "D417"]
 
 [tool.ruff.format]
 preview = true

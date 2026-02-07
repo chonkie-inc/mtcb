@@ -5,7 +5,6 @@ from typing import Any, Dict, List, Optional, Union
 
 from .types import EvalResult
 
-
 # Registry of available datasets and their evaluator classes
 _EVALUATOR_REGISTRY: Dict[str, type] = {}
 
@@ -20,10 +19,13 @@ def register_evaluator(name: str):
         @register_evaluator("gacha")
         class GachaEvaluator(BaseEvaluator):
             ...
+
     """
+
     def decorator(cls):
         _EVALUATOR_REGISTRY[name.lower()] = cls
         return cls
+
     return decorator
 
 
@@ -43,13 +45,12 @@ def get_evaluator_class(dataset: str) -> type:
 
     Raises:
         ValueError: If dataset is not registered
+
     """
     dataset_lower = dataset.lower()
     if dataset_lower not in _EVALUATOR_REGISTRY:
         available = ", ".join(get_available_datasets())
-        raise ValueError(
-            f"Unknown dataset: '{dataset}'. Available datasets: {available}"
-        )
+        raise ValueError(f"Unknown dataset: '{dataset}'. Available datasets: {available}")
     return _EVALUATOR_REGISTRY[dataset_lower]
 
 
@@ -68,6 +69,7 @@ class BenchmarkResult:
         embedding_model: Name of the embedding model used
         k_values: The k values that were evaluated
         metrics: List of metrics that were evaluated (e.g., ["recall", "mrr"])
+
     """
 
     name: str
@@ -90,10 +92,7 @@ class BenchmarkResult:
 
         mean_recall = {}
         for k in self.k_values:
-            recalls = [
-                r.metrics.get("recall", {}).get(k, 0.0)
-                for r in self.results.values()
-            ]
+            recalls = [r.metrics.get("recall", {}).get(k, 0.0) for r in self.results.values()]
             mean_recall[k] = sum(recalls) / len(recalls) if recalls else 0.0
         return mean_recall
 
@@ -105,10 +104,7 @@ class BenchmarkResult:
 
         mean_mrr = {}
         for k in self.k_values:
-            mrrs = [
-                r.metrics.get("mrr", {}).get(k, 0.0)
-                for r in self.results.values()
-            ]
+            mrrs = [r.metrics.get("mrr", {}).get(k, 0.0) for r in self.results.values()]
             mean_mrr[k] = sum(mrrs) / len(mrrs) if mrrs else 0.0
         return mean_mrr
 
@@ -121,8 +117,7 @@ class BenchmarkResult:
         mean_precision = {}
         for k in self.k_values:
             precisions = [
-                r.metrics.get("precision", {}).get(k, 0.0)
-                for r in self.results.values()
+                r.metrics.get("precision", {}).get(k, 0.0) for r in self.results.values()
             ]
             mean_precision[k] = sum(precisions) / len(precisions) if precisions else 0.0
         return mean_precision
@@ -135,10 +130,7 @@ class BenchmarkResult:
 
         mean_ndcg = {}
         for k in self.k_values:
-            ndcgs = [
-                r.metrics.get("ndcg", {}).get(k, 0.0)
-                for r in self.results.values()
-            ]
+            ndcgs = [r.metrics.get("ndcg", {}).get(k, 0.0) for r in self.results.values()]
             mean_ndcg[k] = sum(ndcgs) / len(ndcgs) if ndcgs else 0.0
         return mean_ndcg
 
@@ -172,10 +164,7 @@ class BenchmarkResult:
             "total_evaluation_time": self.total_evaluation_time,
             "total_chunks_created": self.total_chunks_created,
             "total_corpus_size_mb": self.total_corpus_size_mb,
-            "results": {
-                name: r.to_dict()
-                for name, r in self.results.items()
-            },
+            "results": {name: r.to_dict() for name, r in self.results.items()},
         }
         if "recall" in self.metrics:
             result["mean_recall"] = self.mean_recall
@@ -215,8 +204,7 @@ class BenchmarkResult:
             row_vals = ""
             if "recall" in self.metrics:
                 row_vals += "".join(
-                    f"{result.metrics.get('recall', {}).get(k, 0.0):>10.2%}"
-                    for k in self.k_values
+                    f"{result.metrics.get('recall', {}).get(k, 0.0):>10.2%}" for k in self.k_values
                 )
             if "precision" in self.metrics:
                 row_vals += "".join(
@@ -225,13 +213,11 @@ class BenchmarkResult:
                 )
             if "mrr" in self.metrics:
                 row_vals += "".join(
-                    f"{result.metrics.get('mrr', {}).get(k, 0.0):>10.4f}"
-                    for k in self.k_values
+                    f"{result.metrics.get('mrr', {}).get(k, 0.0):>10.4f}" for k in self.k_values
                 )
             if "ndcg" in self.metrics:
                 row_vals += "".join(
-                    f"{result.metrics.get('ndcg', {}).get(k, 0.0):>10.4f}"
-                    for k in self.k_values
+                    f"{result.metrics.get('ndcg', {}).get(k, 0.0):>10.4f}" for k in self.k_values
                 )
             lines.append(f"{dataset.capitalize():<15}{row_vals}")
 
@@ -239,25 +225,15 @@ class BenchmarkResult:
         lines.append("-" * 70)
         mean_vals = ""
         if "recall" in self.metrics:
-            mean_vals += "".join(
-                f"{self.mean_recall.get(k, 0.0):>10.2%}"
-                for k in self.k_values
-            )
+            mean_vals += "".join(f"{self.mean_recall.get(k, 0.0):>10.2%}" for k in self.k_values)
         if "precision" in self.metrics:
             mean_vals += "".join(
-                f"{self.mean_precision.get(k, 0.0):>10.4f}"
-                for k in self.k_values
+                f"{self.mean_precision.get(k, 0.0):>10.4f}" for k in self.k_values
             )
         if "mrr" in self.metrics:
-            mean_vals += "".join(
-                f"{self.mean_mrr.get(k, 0.0):>10.4f}"
-                for k in self.k_values
-            )
+            mean_vals += "".join(f"{self.mean_mrr.get(k, 0.0):>10.4f}" for k in self.k_values)
         if "ndcg" in self.metrics:
-            mean_vals += "".join(
-                f"{self.mean_ndcg.get(k, 0.0):>10.4f}"
-                for k in self.k_values
-            )
+            mean_vals += "".join(f"{self.mean_ndcg.get(k, 0.0):>10.4f}" for k in self.k_values)
         lines.append(f"{'MEAN':<15}{mean_vals}")
 
         # Stats
@@ -345,6 +321,7 @@ class Benchmark:
         ...     k=[1, 3, 5, 10],
         ... )
         >>> print(result)
+
     """
 
     name: str = "Massive Text Chunking Benchmark"
@@ -362,9 +339,7 @@ class Benchmark:
         for dataset in self.datasets:
             if dataset.lower() not in _EVALUATOR_REGISTRY:
                 available = ", ".join(get_available_datasets())
-                raise ValueError(
-                    f"Unknown dataset: '{dataset}'. Available: {available}"
-                )
+                raise ValueError(f"Unknown dataset: '{dataset}'. Available: {available}")
 
     def evaluate(
         self,
@@ -390,6 +365,7 @@ class Benchmark:
 
         Returns:
             BenchmarkResult containing results for all datasets
+
         """
         k_values = [k] if isinstance(k, int) else k
 
@@ -400,9 +376,7 @@ class Benchmark:
             # Validate metrics
             for m in metrics:
                 if m.lower() not in AVAILABLE_METRICS:
-                    raise ValueError(
-                        f"Unknown metric: '{m}'. Available: {AVAILABLE_METRICS}"
-                    )
+                    raise ValueError(f"Unknown metric: '{m}'. Available: {AVAILABLE_METRICS}")
             metrics = [m.lower() for m in metrics]
 
         results = {}
@@ -488,6 +462,7 @@ class NanoBenchmark(Benchmark):
         ...     k=[1, 5, 10],
         ... )
         >>> print(result)
+
     """
 
     name: str = "MTCB Nano Benchmark"
@@ -502,10 +477,7 @@ class NanoBenchmark(Benchmark):
         for dataset in self.datasets:
             if dataset.lower() not in _EVALUATOR_REGISTRY:
                 available = ", ".join(get_nano_datasets())
-                raise ValueError(
-                    f"Unknown nano dataset: '{dataset}'. Available: {available}"
-                )
+                raise ValueError(f"Unknown nano dataset: '{dataset}'. Available: {available}")
 
     def __repr__(self) -> str:
         return f"NanoBenchmark({self.name!r}, datasets={self.datasets})"
-

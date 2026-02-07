@@ -1,6 +1,5 @@
 """Sencha evaluator for Scientific Papers (NLP papers from QASPER)."""
 
-
 from datasets import load_dataset
 
 from ..benchmark import register_evaluator

@@ -1,6 +1,5 @@
 """Macha evaluator for Technical Documentation (GitHub READMEs)."""
 
-
 from datasets import load_dataset
 
 from ..benchmark import register_evaluator
@@ -44,8 +43,7 @@ class MachaEvaluator(BaseEvaluator):
         self.corpus = [doc["text"] for doc in corpus_data]
         self.questions = [q["question"] for q in questions_data]
         self.relevant_passages = [
-            q.get("chunk-must-contain", q.get("supporting_passage", ""))
-            for q in questions_data
+            q.get("chunk-must-contain", q.get("supporting_passage", "")) for q in questions_data
         ]
 
         print(f"Loaded {len(self.corpus)} READMEs and {len(self.questions)} questions")

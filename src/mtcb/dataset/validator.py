@@ -17,6 +17,7 @@ class SampleValidator(Protocol):
 
         Returns:
             True if the sample is valid, False otherwise.
+
         """
         ...
 
@@ -47,6 +48,7 @@ class FuzzyMatchValidator:
         Args:
             similarity_threshold: Minimum similarity ratio (0.0 to 1.0).
                 Default 0.95 allows for minor whitespace differences.
+
         """
         if not 0.0 <= similarity_threshold <= 1.0:
             raise ValueError("similarity_threshold must be between 0.0 and 1.0")

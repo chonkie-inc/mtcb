@@ -50,6 +50,7 @@ class DatasetGenerator:
             prompt_template: Prompt template for generation (defaults to DatasetPromptTemplate.default()).
             deduplicate: Whether to deduplicate samples.
             show_progress_bar: Whether to show progress during generation.
+
         """
         # Lazy import to avoid circular imports
         from chonkie import GeminiGenie, RecursiveChunker
@@ -85,6 +86,7 @@ class DatasetGenerator:
 
         Returns:
             GenerationResult with samples and statistics.
+
         """
         start_time = time.time()
 
@@ -109,17 +111,13 @@ class DatasetGenerator:
 
         # Calculate remaining work
         remaining_docs = [
-            (doc_id, doc)
-            for doc_id, doc in enumerate(corpus)
-            if doc_id not in completed_docs
+            (doc_id, doc) for doc_id, doc in enumerate(corpus) if doc_id not in completed_docs
         ]
         total_target = len(remaining_docs) * samples_per_document
 
         progress_bar = None
         if self.show_progress_bar and total_target > 0:
-            progress_bar = tqdm(
-                total=total_target, desc="Generating samples", unit="samples"
-            )
+            progress_bar = tqdm(total=total_target, desc="Generating samples", unit="samples")
 
         try:
             for doc_id, document in remaining_docs:
@@ -178,9 +176,7 @@ class DatasetGenerator:
                         continue
                     data = json.loads(line)
                     doc_id = data["document_id"]
-                    samples = [
-                        GeneratedSample(**sample) for sample in data["samples"]
-                    ]
+                    samples = [GeneratedSample(**sample) for sample in data["samples"]]
                     completed[doc_id] = samples
         except (json.JSONDecodeError, KeyError):
             # If file is corrupted, start fresh
@@ -215,6 +211,7 @@ class DatasetGenerator:
 
         Returns:
             Tuple of (samples, total_generated, failed_count)
+
         """
         chunks = self.chunker.chunk(document)
 
@@ -280,9 +277,7 @@ class DatasetGenerator:
             return random.sample(chunks, samples_per_doc)
 
         # Weighted sampling
-        sampled_indices = random.choices(
-            range(len(chunks)), weights=weights, k=samples_per_doc
-        )
+        sampled_indices = random.choices(range(len(chunks)), weights=weights, k=samples_per_doc)
 
         # Remove duplicates
         seen = set()
@@ -300,9 +295,7 @@ class DatasetGenerator:
 
         return sampled
 
-    def _distribute_samples(
-        self, chunks: list, total_samples: int
-    ) -> dict[int, int]:
+    def _distribute_samples(self, chunks: list, total_samples: int) -> dict[int, int]:
         """Distribute samples across chunks."""
         if not chunks:
             return {}
@@ -390,14 +383,13 @@ class DatasetGenerator:
 
         Returns:
             DatasetDict with 'corpus' and 'qa' splits.
+
         """
         if isinstance(corpus, str):
             corpus = [corpus]
 
         # Corpus dataset
-        corpus_data = [
-            {"document_id": i, "document": doc} for i, doc in enumerate(corpus)
-        ]
+        corpus_data = [{"document_id": i, "document": doc} for i, doc in enumerate(corpus)]
 
         # QA dataset
         qa_data = [
@@ -410,12 +402,10 @@ class DatasetGenerator:
             for s in result.samples
         ]
 
-        return DatasetDict(
-            {
-                "corpus": Dataset.from_list(corpus_data),
-                "qa": Dataset.from_list(qa_data),
-            }
-        )
+        return DatasetDict({
+            "corpus": Dataset.from_list(corpus_data),
+            "qa": Dataset.from_list(qa_data),
+        })
 
     def __call__(
         self,

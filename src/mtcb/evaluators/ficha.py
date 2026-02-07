@@ -1,6 +1,5 @@
 """Ficha evaluator for Financial Documents (SEC 10-K/10-Q filings)."""
 
-
 from datasets import load_dataset
 
 from ..benchmark import register_evaluator
@@ -44,8 +43,7 @@ class FichaEvaluator(BaseEvaluator):
         self.corpus = [doc.get("text", doc.get("content", "")) for doc in corpus_data]
         self.questions = [q["question"] for q in questions_data]
         self.relevant_passages = [
-            q.get("supporting_passage", q.get("chunk-must-contain", ""))
-            for q in questions_data
+            q.get("supporting_passage", q.get("chunk-must-contain", "")) for q in questions_data
         ]
 
         print(f"Loaded {len(self.corpus)} filings and {len(self.questions)} questions")

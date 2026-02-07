@@ -1,6 +1,5 @@
 """Tacha evaluator for Financial Tables (TAT-QA derived)."""
 
-
 from datasets import load_dataset
 
 from ..benchmark import register_evaluator

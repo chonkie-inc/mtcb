@@ -1,6 +1,5 @@
 """Hojicha evaluator for Legal Contracts (CUAD derived)."""
 
-
 from datasets import load_dataset
 
 from ..benchmark import register_evaluator

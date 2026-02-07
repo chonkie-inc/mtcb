@@ -5,9 +5,9 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
+from chonkie import Chunk
 from tqdm import tqdm
 
-from chonkie import Chunk
 from ..cache import EvalCache
 from ..embeddings import get_embeddings, get_tokenizer_id_for_model
 from ..store import SimpleVectorStore
@@ -122,7 +122,9 @@ class BaseEvaluator(ABC):
 
         # Set up tokenizer
         self._tokenizer = tokenizer
-        self._tokenizer_id = get_tokenizer_id_for_model(self._model_name, tokenizer) if tokenizer else None
+        self._tokenizer_id = (
+            get_tokenizer_id_for_model(self._model_name, tokenizer) if tokenizer else None
+        )
 
         # Set up caching
         self.cache = EvalCache(cache_dir)
@@ -170,7 +172,9 @@ class BaseEvaluator(ABC):
             return self._question_embeddings
 
         def compute_fn():
-            return self.embedding_model.embed_batch(self.questions, input_type="query", show_progress=True)
+            return self.embedding_model.embed_batch(
+                self.questions, input_type="query", show_progress=True
+            )
 
         self._question_embeddings = self.cache.get_or_compute_question_embeddings(
             dataset_id=self.DATASET_ID,
@@ -210,9 +214,9 @@ class BaseEvaluator(ABC):
         question_embeddings = self._get_question_embeddings()
 
         # Calculate total corpus size
-        total_corpus_size_mb = sum(
-            len(text.encode("utf-8")) for text in self.corpus
-        ) / (1024 * 1024)
+        total_corpus_size_mb = sum(len(text.encode("utf-8")) for text in self.corpus) / (
+            1024 * 1024
+        )
 
         # Phase 1: Chunk all documents
         print("Chunking all documents...")

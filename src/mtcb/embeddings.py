@@ -51,13 +51,19 @@ def get_tokenizer_for_model(model: str, override: Optional[str] = None):
         tokenizer_id = TOKENIZER_MAP.get(model_name, DEFAULT_TOKENIZER)
 
     # Load the tokenizer based on type
-    if tokenizer_id.startswith("cl100k") or tokenizer_id.startswith("p50k") or tokenizer_id.startswith("r50k"):
+    if (
+        tokenizer_id.startswith("cl100k")
+        or tokenizer_id.startswith("p50k")
+        or tokenizer_id.startswith("r50k")
+    ):
         # tiktoken tokenizer (OpenAI)
         import tiktoken
+
         return tiktoken.get_encoding(tokenizer_id)
     else:
         # HuggingFace tokenizer
         from tokenizers import Tokenizer
+
         return Tokenizer.from_pretrained(tokenizer_id)
 
 
@@ -109,11 +115,10 @@ class CatsuEmbeddings:
         """
         try:
             import catsu
-        except ImportError:
+        except ImportError as e:
             raise ImportError(
-                "catsu is required for CatsuEmbeddings. "
-                "Install it with: pip install catsu"
-            )
+                "catsu is required for CatsuEmbeddings. Install it with: pip install catsu"
+            ) from e
 
         self.model = model
         self.client = catsu.Client()
@@ -177,16 +182,13 @@ class CatsuEmbeddings:
 
         if show_progress:
             from tqdm import tqdm
-            iterator = tqdm(
-                range(0, len(texts), batch_size),
-                desc="Embedding",
-                leave=False
-            )
+
+            iterator = tqdm(range(0, len(texts), batch_size), desc="Embedding", leave=False)
         else:
             iterator = range(0, len(texts), batch_size)
 
         for i in iterator:
-            batch = texts[i:i + batch_size]
+            batch = texts[i : i + batch_size]
             try:
                 response = self.client.embed(
                     model=self.model,
@@ -234,6 +236,7 @@ def get_embeddings(
         # Check for legacy model2vec:// prefix for backward compatibility
         if model.startswith("model2vec://"):
             from chonkie import AutoEmbeddings
+
             return AutoEmbeddings.get_embeddings(model)
         # Use Catsu for all other models
         return CatsuEmbeddings(model=model, **kwargs)

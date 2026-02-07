@@ -1,6 +1,5 @@
 """Genmaicha evaluator for MIT OCW Lecture Transcripts."""
 
-
 from datasets import load_dataset
 
 from ..benchmark import register_evaluator

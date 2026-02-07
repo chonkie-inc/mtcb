@@ -1,6 +1,5 @@
 """Ryokucha evaluator for Medical Guidelines (NICE, CDC, WHO)."""
 
-
 from datasets import load_dataset
 
 from ..benchmark import register_evaluator
