@@ -3,49 +3,125 @@
 ![MTCB Logo](https://github.com/chonkie-inc/mtcb/blob/main/assets/mtcb.png?raw=true)
 
 # 🔬 mtcb ✨
-_Massive Text Chunking Benchmark. Evaluate your RAG chunking with ease._
+
+_The benchmark for evaluating chunking strategies in RAG pipelines._
+
+[![PyPI version](https://img.shields.io/pypi/v/mtcb.svg)](https://pypi.org/project/mtcb/)
+[![License](https://img.shields.io/github/license/chonkie-inc/mtcb.svg)](https://github.com/chonkie-inc/mtcb/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/chonkie-inc/mtcb.svg)](https://github.com/chonkie-inc/mtcb/stargazers)
+[![Downloads](https://static.pepy.tech/badge/mtcb)](https://pepy.tech/project/mtcb)
+
+[Installation](#-installation) •
+[Quick Start](#-quick-start) •
+[Benchmarks](#-available-benchmarks) •
+[Usage](#-usage) •
+[Metrics](#-metrics)
 
 </div>
 
-Chunking is a crucial step for RAG systems and LLM workflows. Most of the time, chunk quality is rarely evaluated even though it can have a significant impact on the performance of the system. MTCB makes it super easy to evaluate your chunks!
+MTCB (Massive Text Chunking Benchmark) is a standardized evaluation framework for text chunking in RAG systems. It measures how well your chunking and embedding strategy retrieves relevant passages across **9 diverse domains**, from legal contracts to scientific papers. Built on top of [Chonkie](https://github.com/chonkie-inc/chonkie).
 
 ## 📦 Installation
-
-Installation is super easy! Just run the following command in your terminal:
 
 ```bash
 pip install mtcb
 ```
 
-## 🧑‍⚖️ Usage
+## 🚀 Quick Start
 
-MTCB works together with [chonkie](https://github.com/chonkie-inc/chonkie) to evaluate your chunks. It supports all the chunkers that chonkie supports, and as long as any chunker can be wrapped in a `chonkie.BaseChunker` wrapper, MTCB will support it.
+Run the lightweight nano benchmark to evaluate a chunking strategy in minutes:
 
-### Gacha Benchmark
+```python
+from mtcb import NanoBenchmark
+from chonkie import RecursiveChunker
 
-The easiest way to evaluate your chunking strategy is with the Gacha benchmark:
+benchmark = NanoBenchmark()
+result = benchmark.evaluate(
+    chunker=RecursiveChunker(chunk_size=512),
+    embedding_model="voyage-3-large",
+    k=[1, 5, 10],
+)
+print(result)
+```
+
+## 🧩 Available Benchmarks
+
+### Full Benchmark
+
+The full MTCB benchmark spans 9 domains with ~17k questions across ~3k documents:
+
+| Dataset | Domain | Documents | Questions |
+|---------|--------|----------:|----------:|
+| [🧸 Gacha](https://huggingface.co/datasets/chonkie-ai/gacha) | Classic Literature (Gutenberg) | 100 | 2,878 |
+| [💼 Ficha](https://huggingface.co/datasets/chonkie-ai/ficha) | SEC Financial Filings | 88 | 1,331 |
+| [📝 Macha](https://huggingface.co/datasets/chonkie-ai/macha) | GitHub READMEs | 445 | 1,812 |
+| [💻 Cocha](https://huggingface.co/datasets/chonkie-ai/cocha) | Multilingual Code | 1,000 | 2,372 |
+| [📊 Tacha](https://huggingface.co/datasets/chonkie-ai/tacha) | Financial Tables (TAT-QA) | 349 | 2,065 |
+| [🔬 Sencha](https://huggingface.co/datasets/chonkie-ai/sencha) | Scientific Papers (QASPER) | 243 | 1,507 |
+| [⚖️ Hojicha](https://huggingface.co/datasets/chonkie-ai/hojicha) | Legal Contracts (CUAD) | 194 | 1,568 |
+| [🏥 Ryokucha](https://huggingface.co/datasets/chonkie-ai/ryokucha) | Medical Guidelines (NICE/CDC/WHO) | 241 | 1,351 |
+| [🎓 Genmaicha](https://huggingface.co/datasets/chonkie-ai/genmaicha) | MIT OCW Lecture Transcripts | 250 | 2,037 |
+| | **Total** | **2,910** | **16,921** |
+
+### Nano Benchmark
+
+For fast iteration during development, MTCB provides a lightweight nano benchmark with ~100 questions per dataset. Documents are selected to maximize question density:
+
+| Dataset | Domain | Documents | Questions |
+|---------|--------|----------:|----------:|
+| [🧸 nano-gacha](https://huggingface.co/datasets/chonkie-ai/nano-gacha) | Classic Literature | 5 | 100 |
+| [💼 nano-ficha](https://huggingface.co/datasets/chonkie-ai/nano-ficha) | SEC Financial Filings | 5 | 100 |
+| [📝 nano-macha](https://huggingface.co/datasets/chonkie-ai/nano-macha) | GitHub READMEs | 19 | 100 |
+| [💻 nano-cocha](https://huggingface.co/datasets/chonkie-ai/nano-cocha) | Multilingual Code | 26 | 100 |
+| [📊 nano-tacha](https://huggingface.co/datasets/chonkie-ai/nano-tacha) | Financial Tables | 11 | 100 |
+| [🔬 nano-sencha](https://huggingface.co/datasets/chonkie-ai/nano-sencha) | Scientific Papers | 13 | 100 |
+| [⚖️ nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | Legal Contracts | 10 | 100 |
+| [🏥 nano-ryokucha](https://huggingface.co/datasets/chonkie-ai/nano-ryokucha) | Medical Guidelines | 12 | 100 |
+| [🎓 nano-genmaicha](https://huggingface.co/datasets/chonkie-ai/nano-genmaicha) | Lecture Transcripts | 7 | 100 |
+| | **Total** | **108** | **900** |
+
+## 🔧 Usage
+
+MTCB works with [Chonkie](https://github.com/chonkie-inc/chonkie) — any chunker that extends `chonkie.BaseChunker` is supported out of the box.
+
+### Full Benchmark
+
+Run the complete benchmark across all 9 domains:
+
+```python
+from mtcb import Benchmark
+from chonkie import RecursiveChunker
+
+benchmark = Benchmark()
+result = benchmark.evaluate(
+    chunker=RecursiveChunker(chunk_size=512),
+    embedding_model="voyage-3-large",
+    k=[1, 5, 10],
+)
+print(result)
+```
+
+### Individual Evaluators
+
+Run a single domain-specific evaluator:
 
 ```python
 from mtcb import GachaEvaluator
 from chonkie import RecursiveChunker
 
-# Initialize the evaluator with your chunker
 evaluator = GachaEvaluator(
     chunker=RecursiveChunker(chunk_size=1000),
     embedding_model="voyage-3-large",
     cache_dir="./cache"
 )
 
-# Evaluate your chunks
 result = evaluator.evaluate(k=[1, 3, 5, 10])
-
-# Print the results
 print(result)
 ```
 
 ### Custom Datasets
 
-You can also evaluate on your own datasets using `SimpleEvaluator`:
+Evaluate on your own corpus using `SimpleEvaluator`:
 
 ```python
 from mtcb import SimpleEvaluator
@@ -65,7 +141,7 @@ print(result)
 
 ### Dataset Generation
 
-MTCB can also generate verified QA datasets from your documents for evaluation:
+Generate verified QA datasets from your own documents:
 
 ```python
 from mtcb import DatasetGenerator
@@ -74,7 +150,7 @@ generator = DatasetGenerator(deduplicate=True)
 result = generator.generate(
     corpus=["Your document text..."],
     samples_per_document=10,
-    output_path="./output.jsonl",  # Save progress incrementally
+    output_path="./output.jsonl",
 )
 
 print(f"Generated {result.total_verified} verified samples")
@@ -83,69 +159,18 @@ for sample in result.samples:
     print(f"A: {sample.answer}")
 ```
 
-### Metrics
+## 📊 Metrics
 
-MTCB calculates:
-- **Recall@k**: Percentage of questions where the relevant passage is in the top-k results
+MTCB evaluates retrieval quality using:
+
+- **Recall@k**: Percentage of questions where the relevant passage appears in the top-k results
 - **Precision@k**: Ratio of relevant chunks in the top-k results
-- **MRR@k**: Mean Reciprocal Rank at k
-- **NDCG@k**: Normalized Discounted Cumulative Gain at k
-
-## 🧩 Available Benchmarks
-
-### Full Benchmark
-
-The full MTCB benchmark contains 16,974 questions across 3,202 documents spanning 9 diverse domains:
-
-| Dataset | Domain | Documents | Questions |
-|---------|--------|----------:|----------:|
-| [🧸 Gacha](https://huggingface.co/datasets/chonkie-ai/gacha) | Classic Literature (Gutenberg) | 100 | 2,878 |
-| [💼 Ficha](https://huggingface.co/datasets/chonkie-ai/ficha) | SEC Financial Filings | 88 | 1,331 |
-| [📝 Macha](https://huggingface.co/datasets/chonkie-ai/macha) | GitHub READMEs | 445 | 1,812 |
-| [💻 Cocha](https://huggingface.co/datasets/chonkie-ai/cocha) | Multilingual Code | 1,000 | 2,372 |
-| [📊 Tacha](https://huggingface.co/datasets/chonkie-ai/tacha) | Financial Tables (TAT-QA) | 349 | 2,065 |
-| [🔬 Sencha](https://huggingface.co/datasets/chonkie-ai/sencha) | Scientific Papers (QASPER) | 243 | 1,507 |
-| [⚖️ Hojicha](https://huggingface.co/datasets/chonkie-ai/hojicha) | Legal Contracts (CUAD) | 194 | 1,568 |
-| [🏥 Ryokucha](https://huggingface.co/datasets/chonkie-ai/ryokucha) | Medical Guidelines (NICE/CDC/WHO) | 241 | 1,351 |
-| [🎓 Genmaicha](https://huggingface.co/datasets/chonkie-ai/genmaicha) | MIT OCW Lecture Transcripts | 250 | 2,037 |
-| | **Total** | **2,910** | **16,921** |
-
-### Nano Benchmark
-
-For fast iteration and testing, MTCB provides a lightweight nano benchmark with ~100 questions per dataset. Documents are selected to maximize question density (fewest documents needed for 100 questions):
-
-| Dataset | Domain | Documents | Questions |
-|---------|--------|----------:|----------:|
-| [🧸 nano-gacha](https://huggingface.co/datasets/chonkie-ai/nano-gacha) | Classic Literature | 5 | 100 |
-| [💼 nano-ficha](https://huggingface.co/datasets/chonkie-ai/nano-ficha) | SEC Financial Filings | 5 | 100 |
-| [📝 nano-macha](https://huggingface.co/datasets/chonkie-ai/nano-macha) | GitHub READMEs | 19 | 100 |
-| [💻 nano-cocha](https://huggingface.co/datasets/chonkie-ai/nano-cocha) | Multilingual Code | 26 | 100 |
-| [📊 nano-tacha](https://huggingface.co/datasets/chonkie-ai/nano-tacha) | Financial Tables | 11 | 100 |
-| [🔬 nano-sencha](https://huggingface.co/datasets/chonkie-ai/nano-sencha) | Scientific Papers | 13 | 100 |
-| [⚖️ nano-hojicha](https://huggingface.co/datasets/chonkie-ai/nano-hojicha) | Legal Contracts | 10 | 100 |
-| [🏥 nano-ryokucha](https://huggingface.co/datasets/chonkie-ai/nano-ryokucha) | Medical Guidelines | 12 | 100 |
-| [🎓 nano-genmaicha](https://huggingface.co/datasets/chonkie-ai/nano-genmaicha) | Lecture Transcripts | 7 | 100 |
-| | **Total** | **108** | **900** |
-
-Use `NanoBenchmark` for quick evaluations during development:
-
-```python
-from mtcb import NanoBenchmark
-from chonkie import RecursiveChunker
-
-benchmark = NanoBenchmark()
-result = benchmark.evaluate(
-    chunker=RecursiveChunker(chunk_size=512),
-    embedding_model="voyage-3-large",
-    k=[1, 5, 10],
-)
-print(result)
-```
-
+- **MRR@k**: Mean Reciprocal Rank — how high the first relevant result ranks
+- **NDCG@k**: Normalized Discounted Cumulative Gain — position-weighted relevance scoring
 
 ## 📚 Citation
 
-If you use MTCB in your work, please cite it as follows:
+If you use MTCB in your research, please cite:
 
 ```bibtex
 @software{mtcb2025,
