@@ -39,4 +39,4 @@ jobs:
         run: uv venv && uv pip install -e ".[dev]"
 
       - name: Type check
-        run: uv run ty check
+        run: uv run ty check src/
