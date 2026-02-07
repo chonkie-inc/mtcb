@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mtcb"
-version = "0.0.3"
+version = "0.1.0"
 description = "MTCB - Massive Text Chunking Benchmark. Evaluate your RAG chunking with ease."
 readme = "README.md"
 license = "Apache-2.0"
