@@ -189,9 +189,10 @@ class DatasetGenerator:
         return completed
 
     def _save_document_progress(
-        self, output_path: Path, doc_id: int, samples: list[GeneratedSample]
+        self, output_path: Union[str, Path], doc_id: int, samples: list[GeneratedSample]
     ) -> None:
         """Append completed document samples to output file."""
+        output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         data = {
@@ -357,7 +358,7 @@ class DatasetGenerator:
                     existing_questions=existing_questions,
                 )
 
-                result = self.genie.generate_json(prompt, GeneratedSample)
+                result = self.genie.generate_json(prompt, GeneratedSample)  # type: ignore[arg-type]
 
                 # Create sample
                 sample = GeneratedSample(

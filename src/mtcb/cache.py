@@ -51,11 +51,10 @@ class EvalCache:
 
         """
         self.enabled = cache_dir is not None
-        if self.enabled:
+        self.cache_dir: Optional[Path] = None
+        if self.enabled and cache_dir is not None:
             self.cache_dir = Path(cache_dir)
             self.cache_dir.mkdir(parents=True, exist_ok=True)
-        else:
-            self.cache_dir = None
 
     def _get_cache_key(self, *parts: str) -> str:
         """Generate a cache key from parts."""
@@ -64,10 +63,12 @@ class EvalCache:
 
     def _chunks_path(self, cache_key: str) -> Path:
         """Get path for chunks cache file."""
+        assert self.cache_dir is not None
         return self.cache_dir / f"chunks_{cache_key}.jsonl"
 
     def _embeddings_path(self, cache_key: str) -> Path:
         """Get path for embeddings cache file."""
+        assert self.cache_dir is not None
         return self.cache_dir / f"embeddings_{cache_key}.npy"
 
     def get_or_compute_chunks(
@@ -180,6 +181,7 @@ class EvalCache:
         if not self.enabled:
             return
 
+        assert self.cache_dir is not None
         for path in self.cache_dir.glob("*.jsonl"):
             path.unlink()
         for path in self.cache_dir.glob("*.npy"):

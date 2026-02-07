@@ -1,6 +1,6 @@
 """Embedding providers for MTCB using Catsu."""
 
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union
 
 import numpy as np
 
@@ -209,9 +209,9 @@ class CatsuEmbeddings:
 
 
 def get_embeddings(
-    model: Union[str, "CatsuEmbeddings", any],
+    model: Union[str, "CatsuEmbeddings", Any],
     **kwargs,
-) -> Union["CatsuEmbeddings", any]:
+) -> Union["CatsuEmbeddings", Any]:
     """Get an embeddings instance for the given model.
 
     This is a factory function that returns the appropriate embeddings class.

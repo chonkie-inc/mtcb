@@ -85,6 +85,7 @@ class SimpleVectorStore:
 
     # Compute cosine similarity: (normalized_query @ normalized_embeddings.T)
     # This is equivalent to (query_embedding @ embeddings.T) / (norm(query) * norm(embeddings))
+    assert self._normalized_embeddings is not None
     similarity_scores = normalized_query @ self._normalized_embeddings.T
 
     # Get the indices of the top K scores

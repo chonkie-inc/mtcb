@@ -9,20 +9,24 @@ description = "MTCB - Massive Text Chunking Benchmark. Evaluate your RAG chunkin
 readme = "README.md"
 license = "Apache-2.0"
 authors = [
-    { name = "Bhavnick Minhas" },
-    { name = "Shreyash Nigam" },
+    { name = "Bhavnick Minhas", email = "bhavnick@chonkie.ai" },
+    { name = "Shreyash Nigam", email = "shreyash@chonkie.ai" },
 ]
 maintainers = [
-    { name = "Bhavnick Minhas" },
-    { name = "Shreyash Nigam" },
+    { name = "Bhavnick Minhas", email = "bhavnick@chonkie.ai" },
+    { name = "Shreyash Nigam", email = "shreyash@chonkie.ai" },
 ]
 keywords = [
+    "benchmark",
     "chunking",
+    "text-chunking",
     "rag",
     "llm",
     "evaluation",
     "nlp",
     "information-retrieval",
+    "embeddings",
+    "retrieval",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -53,7 +57,8 @@ dev = [
     "ruff",
     "pytest>=6.0",
     "pytest-cov",
-    "mypy",
+    "pytest-xdist",
+    "ty",
 ]
 
 [project.urls]
@@ -67,3 +72,14 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+line-length = 99
+lint.select = ["B904", "F", "I", "D"]
+lint.ignore = ["D211", "D213", "D203"]
+
+[tool.ruff.format]
+preview = true
+indent-style = "space"
+
+[tool.ty]

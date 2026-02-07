@@ -348,14 +348,14 @@ class Benchmark:
     """
 
     name: str = "Massive Text Chunking Benchmark"
-    datasets: Optional[List[str]] = None
+    datasets: List[str] = field(default_factory=list)
     description: Optional[str] = None
     reference: Optional[str] = None
 
     def __post_init__(self):
         """Set defaults and validate datasets exist."""
         # Default to all full (non-nano) datasets
-        if self.datasets is None:
+        if not self.datasets:
             self.datasets = get_full_datasets()
 
         # Validate all datasets exist
@@ -495,7 +495,7 @@ class NanoBenchmark(Benchmark):
     def __post_init__(self):
         """Set defaults and validate datasets exist."""
         # Default to all nano datasets
-        if self.datasets is None:
+        if not self.datasets:
             self.datasets = get_nano_datasets()
 
         # Validate all datasets exist
