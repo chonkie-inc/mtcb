@@ -1,5 +1,7 @@
 <div align="center">
 
+![MTCB Logo](https://github.com/chonkie-inc/mtcb/blob/main/assets/mtcb.png?raw=true)
+
 # 🔬 mtcb ✨
 _Massive Text Chunking Benchmark. Evaluate your RAG chunking with ease._
 
